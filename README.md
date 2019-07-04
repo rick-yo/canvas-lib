@@ -11,8 +11,17 @@ canvas library
 
 # API
 
-## Canvas
+## shapes
+* Line, dashed or solid
+* arc
+* polygon
+* path
+* clip
+* ellipse
+* image
 
+## custom style
+* fill,stroke,shadow,gradient, pattern,
 
 # example
 ```JavaScript
