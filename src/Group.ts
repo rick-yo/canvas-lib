@@ -1,35 +1,39 @@
-import Shape, { ShapeProps, applyCanvasStyleToContext } from './Shape'
+import Shape, { ShapeAttrs, applyCanvasStyleToContext } from './Shape';
 
-export interface GroupProps extends ShapeProps {
-}
-
-export default class Group extends Shape<GroupProps> {
-  type = 'group'
-  shapes: Shape[] = []
-  constructor(props: GroupProps) {
-    super(props)
+export interface GroupAttrs extends ShapeAttrs {}
+/**
+ * Group is another container for shape, like canvas, Group `add` or `remove` a shape
+ * `Group.render` will apply Group and shape's attrs to canvas context and render Group's stored shape
+ *
+ * @export
+ * @class Group
+ * @extends {Shape<GroupAttrs>}
+ */
+export default class Group extends Shape<GroupAttrs> {
+  type = 'group';
+  shapes: Shape[] = [];
+  constructor(attrs: GroupAttrs) {
+    super(attrs);
   }
   add(shape: Shape) {
-    shape.props.x += this.props.x
-    shape.props.y += this.props.y
-    this.shapes = this.shapes.concat(shape)
+    this.shapes.push(shape);
   }
   remove(shape: Shape) {
-    const index = this.shapes.indexOf(shape)
+    const index = this.shapes.indexOf(shape);
     if (index > -1) {
-      this.shapes.splice(index, 1)
+      this.shapes.splice(index, 1);
     }
   }
-  getInstance() {
-    return this.shapes
+  getShapeInstance() {
+    return this.shapes;
   }
   render(ctx: CanvasRenderingContext2D) {
     this.shapes.forEach(shape => {
-      ctx.save()
+      ctx.save();
       // group 需要特殊处理
-      applyCanvasStyleToContext(ctx, shape.props)
-      shape.render(ctx)
-      ctx.restore()
-    })
+      applyCanvasStyleToContext(ctx, this.attrs, shape.attrs);
+      shape.render(ctx);
+      ctx.restore();
+    });
   }
 }

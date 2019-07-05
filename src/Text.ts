@@ -1,7 +1,7 @@
-import Shape, { ShapeProps } from './Shape';
+import Shape, { ShapeAttrs } from './Shape';
 import inRange from 'lodash/inRange';
 
-export interface TextProps extends ShapeProps {
+export interface TextAttrs extends ShapeAttrs {
   text: string;
   font?: string;
   maxWidth?: number;
@@ -9,15 +9,15 @@ export interface TextProps extends ShapeProps {
   height?: number;
 }
 
-export default class Text extends Shape<TextProps> {
+export default class Text extends Shape<TextAttrs> {
   type = 'text';
-  constructor(props: TextProps) {
-    super(props);
+  constructor(attrs: TextAttrs) {
+    super(attrs);
     // 手动计算高度
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { x, y, text, font } = this.props;
-    let { width, maxWidth, height } = this.props;
+    const { x, y, text, font } = this.attrs;
+    let { width, maxWidth, height } = this.attrs;
     if (font) {
       ctx.font = font;
     }
@@ -40,7 +40,7 @@ export default class Text extends Shape<TextProps> {
     ctx.fillText(`${currentText}${ellipsis}`, x, y);
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
-    const { x, y, width, height } = this.props;
+    const { x, y, width, height } = this.attrs;
     if (!width || !height) return false;
     return inRange(px, x, x + width) && inRange(py, y, y + height);
   }

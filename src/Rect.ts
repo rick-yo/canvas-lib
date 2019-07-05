@@ -1,18 +1,19 @@
 import inRange from 'lodash/inRange';
-import Shape, { ShapeProps } from './Shape';
+import Shape, { ShapeAttrs } from './Shape';
 
-export interface RectProps extends ShapeProps {
+export interface RectAttrs extends ShapeAttrs {
   radius?: number[];
   width: number;
   height: number;
 }
 
-export default class Rect extends Shape<RectProps> {
+export default class Rect extends Shape<RectAttrs> {
   type = 'rect';
-  constructor(props: RectProps) {
-    super(props);
+  path = new Path2D();
+  constructor(attrs: RectAttrs) {
+    super(attrs);
   }
-  render(ctx: CanvasRenderingContext2D) {
+  makeRectPath(ctx: CanvasRenderingContext2D) {
     const {
       x,
       y,
@@ -21,22 +22,22 @@ export default class Rect extends Shape<RectProps> {
       radius = [],
       strokeStyle,
       fillStyle,
-    } = this.props;
+    } = this.attrs;
     const [leftTop = 0, rightTop = 0, rightBottom = 0, leftBottom = 0] = radius;
-    const path = new Path2D();
+    this.path = new Path2D();
     // 左上角
     if (leftTop) {
-      path.moveTo(x, y + leftTop);
-      path.arc(x + leftTop, y + leftTop, leftTop, Math.PI, Math.PI * 1.5);
+      this.path.moveTo(x, y + leftTop);
+      this.path.arc(x + leftTop, y + leftTop, leftTop, Math.PI, Math.PI * 1.5);
     } else {
-      path.moveTo(x, y);
+      this.path.moveTo(x, y);
     }
     // border-top
-    path.lineTo(x + width - rightTop, y);
+    this.path.lineTo(x + width - rightTop, y);
 
     // 右上角
     if (rightTop) {
-      path.arc(
+      this.path.arc(
         x + width - rightTop,
         y + rightTop,
         rightTop,
@@ -44,15 +45,15 @@ export default class Rect extends Shape<RectProps> {
         Math.PI * 2,
       );
     } else {
-      path.lineTo(x + width, y);
+      this.path.lineTo(x + width, y);
     }
 
     // border-right
-    path.lineTo(x + width, y + height - rightBottom);
+    this.path.lineTo(x + width, y + height - rightBottom);
 
     // 右下角
     if (rightBottom) {
-      path.arc(
+      this.path.arc(
         x + width - rightBottom,
         y + height - rightBottom,
         rightBottom,
@@ -60,14 +61,14 @@ export default class Rect extends Shape<RectProps> {
         Math.PI * 0.5,
       );
     } else {
-      path.lineTo(x + width, y + height);
+      this.path.lineTo(x + width, y + height);
     }
 
     // border-bottom
-    path.lineTo(x - leftBottom, y + height);
+    this.path.lineTo(x - leftBottom, y + height);
     // 左下角
     if (leftBottom) {
-      path.arc(
+      this.path.arc(
         x + leftBottom,
         y + height - leftBottom,
         leftBottom,
@@ -75,18 +76,22 @@ export default class Rect extends Shape<RectProps> {
         Math.PI,
       );
     } else {
-      path.lineTo(x, y + height);
+      this.path.lineTo(x, y + height);
     }
 
+    this.path.closePath();
+  }
+  render(ctx: CanvasRenderingContext2D) {
+    const { strokeStyle, fillStyle } = this.attrs;
+    this.makeRectPath(ctx);
     if (strokeStyle) {
-      ctx.stroke(path);
+      ctx.stroke(this.path);
     }
     if (fillStyle) {
-      ctx.fill(path);
+      ctx.fill(this.path);
     }
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
-    const { x, y, width, height } = this.props;
-    return inRange(px, x, x + width) && inRange(py, y, y + height);
+    return ctx.isPointInPath(this.path, px, py)
   }
 }
