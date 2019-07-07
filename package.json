@@ -1,8 +1,8 @@
 {
   "name": "canvas-lib",
   "version": "0.0.1",
-  "description": "canvas library & utils",
-  "main": "index.js",
+  "description": "canvas library with a delightful API",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel example/index.html --open"
@@ -11,16 +11,22 @@
     "type": "git",
     "url": "git+https://github.com/luv-sic/canvas-lib.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "canvas",
+    "library",
+    "util"
+  ],
+  "author": "https://github.com/luv-sic",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/luv-sic/canvas-lib/issues"
   },
   "homepage": "https://github.com/luv-sic/canvas-lib#readme",
   "dependencies": {
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
     "@types/lodash": "^4.14.135",
-    "lodash": "^4.17.11",
     "typescript": "^3.5.2"
   }
 }

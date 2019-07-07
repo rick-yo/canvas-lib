@@ -1,27 +1,14 @@
 # canvas-lib
-canvas library
+canvas library with a delightful API.
 
 # Feature
 * support all kinds of shapes, draw with no side-effect
-* custom style support
 * group shapes support
 * event system, drag & drop
 * transform, scale and translate canvas coordinate
 * support basic animation
 
 # API
-
-## shapes
-* Line, dashed or solid
-* arc
-* polygon
-* path
-* clip
-* ellipse
-* image
-
-## custom style
-* fill,stroke,shadow,gradient, pattern,
 
 # example
 ```JavaScript
@@ -35,7 +22,7 @@ const rect = new Rect({
   fillStyle: 'blue',
 });
 
-rect.on('click', e => {
+rect.on('click', (e, shape) => {
   console.log('rect being clicked');
 });
 
@@ -44,5 +31,5 @@ canvas.add(rect);
 # Design
 
 * Canvas, shape container, add/remove/draw shape, event delegation and dispatch
-* Shape All concrete shape extends Shape, style、position property and shapes'events stored here
-* Group, special Shape, it stored shape added to it. and change it's property like style and position
+* Shape, All concrete shape extends Shape, style、position property and shapes'events stored here
+* Group, special Shape container, it stored shape added to it. and change it's property like style and position
