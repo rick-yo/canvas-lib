@@ -2,7 +2,15 @@ import Canvas from '../src/Canvas';
 import Rect from '../src/Rect';
 import Image from '../src/Image';
 
-function main() {
+function wait(millSecond: number) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, millSecond);
+  });
+}
+
+async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('#canvas');
   const img = document.querySelector<HTMLCanvasElement>('img');
   if (!canvas) return;
@@ -35,9 +43,10 @@ function main() {
   }
 
   can.add(rect);
-  setTimeout(() => {
-    can.remove(rect);
-  }, 2000);
+  await wait(1000);
+  rect.set('fillStyle', 'blue');
+  await wait(1500);
+  can.remove(rect);
 }
 
 main();

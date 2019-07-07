@@ -1,3 +1,4 @@
+import { CANVAS_RERENDER_EVENT_TYPE } from './Canvas';
 import Shape, { ShapeAttrs, applyCanvasStyleToContext } from './Shape';
 
 export interface GroupAttrs extends ShapeAttrs {}
@@ -17,15 +18,14 @@ export default class Group extends Shape<GroupAttrs> {
   }
   add(shape: Shape) {
     this.shapes.push(shape);
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
   remove(shape: Shape) {
     const index = this.shapes.indexOf(shape);
     if (index > -1) {
       this.shapes.splice(index, 1);
     }
-  }
-  getShapeInstance() {
-    return this.shapes;
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
   render(ctx: CanvasRenderingContext2D) {
     this.shapes.forEach(shape => {

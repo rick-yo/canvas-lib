@@ -1,5 +1,5 @@
 import EventEmitter from './EventEmitter';
-import Canvas from './Canvas';
+import Canvas, { CANVAS_RERENDER_EVENT_TYPE } from './Canvas';
 import cloneDeep from 'lodash/cloneDeep';
 import assign from 'lodash/assign';
 
@@ -48,7 +48,6 @@ export const canvasStylesMap: Dictionary<boolean> = {
 export interface ShapeAttrs extends CanvasStyles {
   x: number;
   y: number;
-  id?: string;
 }
 /**
  * basic shape class for rect circle path...
@@ -66,6 +65,7 @@ export default abstract class Shape<
 > extends EventEmitter {
   type = 'shape';
   attrs: ShapeAttrs & P;
+  canvas: Canvas | null = null;
   constructor(attrs: ShapeAttrs & P) {
     super();
     this.attrs = attrs;
@@ -76,26 +76,24 @@ export default abstract class Shape<
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
     throw new Error('isPointInShape method not implemented');
   }
-  getShapeInstance(): Shape[] | Shape {
-    return this;
-  }
-  set(stage: Canvas, key: CanvasStylesKeys, value: any) {
+  set = (key: CanvasStylesKeys, value: any) => {
     this.attrs[key] = value;
-    stage.render();
-  }
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
+  };
 }
 
 export function applyCanvasStyleToContext(
   ctx: CanvasRenderingContext2D,
-  ...attrs: ShapeAttrs[]
+  ..._attrs: ShapeAttrs[]
 ) {
-  const { rotate, translate, x, y } = <ShapeAttrs>(
-    assign({}, ...attrs.map(cloneDeep))
+  const attrs = <ShapeAttrs>(
+    assign({}, ..._attrs.map(cloneDeep))
   );
+  const { rotate, translate, x, y } = attrs;
   for (const key in attrs) {
     if (attrs.hasOwnProperty(key) && canvasStylesMap[key]) {
       // @ts-ignore
-      ctx[key] = attrs[key as CanvasStylesKeys];
+      ctx[key] = attrs[key];
     }
   }
   if (rotate) {

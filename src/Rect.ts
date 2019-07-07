@@ -92,6 +92,6 @@ export default class Rect extends Shape<RectAttrs> {
     }
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
-    return ctx.isPointInPath(this.path, px, py)
+    return ctx.isPointInPath(this.path, px, py);
   }
 }
