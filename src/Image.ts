@@ -6,9 +6,19 @@ export interface ImageAttrs extends ShapeAttrs {
   width: number;
   height: number;
 }
-
+/**
+ *
+ * @export
+ * @class Image
+ * @extends {Shape<ImageAttrs>}
+ */
 export default class Image extends Shape<ImageAttrs> {
   type = 'image';
+  /**
+   * Creates an instance of Image shape.
+   * @param {ImageAttrs} attrs
+   * @memberof Image
+   */
   constructor(attrs: ImageAttrs) {
     super(attrs);
   }

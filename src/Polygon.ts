@@ -10,6 +10,11 @@ export interface PolygonAttrs extends ShapeAttrs {
 export default class Polygon extends Shape<PolygonAttrs> {
   type = 'polygon';
   path = new Path2D();
+  /**
+   * Creates an instance of Polygon shape.
+   * @param {PolygonAttrs} attrs
+   * @memberof Polygon
+   */
   constructor(attrs: PolygonAttrs) {
     super(attrs);
   }

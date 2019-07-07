@@ -33,9 +33,9 @@ const MOUSE_EVENTS: MouseEventType[] = [
 ];
 
 /**
- * canvas is shape's container, it can `add` or `remove` shape,
- * when you add a shape, canvas apply shape's attrs to current context, and render the shape
- * canvas delegate event like click, mousemove, and dispatch event to the right shape
+ * Canvas is shape's container, it can `add` or `remove` shape,
+ * when you add a shape, canvas apply shape's attrs to current context, and render the shape to canvas
+ * Canvas delegate event like click, mousemove, and dispatch event to the right shape
  *
  * @export
  * @class Canvas

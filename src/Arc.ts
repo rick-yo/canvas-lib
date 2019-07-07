@@ -12,6 +12,11 @@ const PI2 = Math.PI * 2;
 export default class Arc extends Shape<ArcAttrs> {
   type = 'arc';
   path = new Path2D();
+  /**
+   * Creates an instance of Arc shape.
+   * @param {ArcAttrs} attrs
+   * @memberof Arc
+   */
   constructor(attrs: ArcAttrs) {
     super(attrs);
   }
@@ -30,7 +35,7 @@ export default class Arc extends Shape<ArcAttrs> {
   }
   render(ctx: CanvasRenderingContext2D) {
     this.makeArcPath(ctx);
-    this.fillOrStroke(ctx, this.path)
+    this.fillOrStroke(ctx, this.path);
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
     return ctx.isPointInPath(this.path, px, py);

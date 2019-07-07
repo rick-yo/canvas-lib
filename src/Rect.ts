@@ -10,17 +10,16 @@ export interface RectAttrs extends ShapeAttrs {
 export default class Rect extends Shape<RectAttrs> {
   type = 'rect';
   path = new Path2D();
+  /**
+   * Creates an instance of Rect shape.
+   * @param {RectAttrs} attrs
+   * @memberof Rect
+   */
   constructor(attrs: RectAttrs) {
     super(attrs);
   }
   makeRectPath(ctx: CanvasRenderingContext2D) {
-    const {
-      x,
-      y,
-      width,
-      height,
-      radius = [],
-    } = this.attrs;
+    const { x, y, width, height, radius = [] } = this.attrs;
     const [leftTop = 0, rightTop = 0, rightBottom = 0, leftBottom = 0] = radius;
     this.path = new Path2D();
     // 左上角
@@ -81,7 +80,7 @@ export default class Rect extends Shape<RectAttrs> {
   }
   render(ctx: CanvasRenderingContext2D) {
     this.makeRectPath(ctx);
-    this.fillOrStroke(ctx, this.path)
+    this.fillOrStroke(ctx, this.path);
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
     return ctx.isPointInPath(this.path, px, py);

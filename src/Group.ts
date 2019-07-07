@@ -3,8 +3,9 @@ import Shape, { ShapeAttrs, applyCanvasStyleToContext } from './Shape';
 
 export interface GroupAttrs extends ShapeAttrs {}
 /**
- * Group is another container for shape, like canvas, Group `add` or `remove` a shape
- * `Group.render` will apply Group and shape's attrs to canvas context and render Group's stored shape
+ * Group is another container for shape. like Canvas, Group `add` or `remove` a shape
+ * But Group need to be added to Canvas to get it and it's shapes renddered,
+ * Group mix it's attr and shape's attr to render a shape.
  *
  * @export
  * @class Group

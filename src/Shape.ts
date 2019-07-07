@@ -55,7 +55,7 @@ type ShapeAttrsKeys = keyof ShapeAttrs;
  * basic shape class for rect circle path...
  * Shape extends eventEmitter to store and fire events
  * Shape store attrs and provide `render` method to draw the shape.
- * you can `set` shape's attrs and it will rerender it automatically
+ * you can `set` shape's attrs and shape will rerender accrodding to the new attrs automatically
  *
  * @export
  * @abstract
@@ -75,7 +75,11 @@ export default abstract class Shape<
   render(ctx: CanvasRenderingContext2D): void {
     throw new Error('render method not implemented');
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number): boolean {
+  isPointInShape(
+    ctx: CanvasRenderingContext2D,
+    px: number,
+    py: number,
+  ): boolean {
     throw new Error('isPointInShape method not implemented');
   }
   set = (key: ShapeAttrsKeys, value: unknown) => {

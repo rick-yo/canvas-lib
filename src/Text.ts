@@ -11,9 +11,14 @@ export interface TextAttrs extends ShapeAttrs {
 
 export default class Text extends Shape<TextAttrs> {
   type = 'text';
+  /**
+   * Creates an instance of Text shape.
+   * When `attrs.maxWidth` specified, Text will be automatically ellipsised
+   * @param {TextAttrs} attrs
+   * @memberof Text
+   */
   constructor(attrs: TextAttrs) {
     super(attrs);
-    // 手动计算高度
   }
   render(ctx: CanvasRenderingContext2D) {
     const { x, y, text, font } = this.attrs;
@@ -21,6 +26,7 @@ export default class Text extends Shape<TextAttrs> {
     if (font) {
       ctx.font = font;
     }
+    // 手动计算高度
     height = height || parseInt(ctx.font, 10);
     width = ctx.measureText(text).width;
     if (!maxWidth) {
@@ -42,10 +48,10 @@ export default class Text extends Shape<TextAttrs> {
   fillOrStrokeText(ctx: CanvasRenderingContext2D, acturalText: string) {
     const { x, y, text, fillStyle, strokeStyle } = this.attrs;
     if (fillStyle) {
-      ctx.fillText(acturalText, x, y)
+      ctx.fillText(acturalText, x, y);
     }
     if (strokeStyle) {
-      ctx.strokeText(acturalText, x, y)
+      ctx.strokeText(acturalText, x, y);
     }
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
