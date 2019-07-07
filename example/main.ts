@@ -47,6 +47,9 @@ async function main() {
     radius: 50,
     strokeStyle: 'green',
     sides: 5,
+    // scale: [2,2],
+    // translate: [100, -100],
+    rotate: Math.PI / 20,
   });
   if (img) {
     const image = new Image({
@@ -56,11 +59,23 @@ async function main() {
       height: 200,
       image: img,
     });
+    image.on('click', (e, shape) => {
+      console.log('e :', shape.attr);
+    });
     can.add(image);
   }
 
-  // can.add(rect);
-  // can.add(arc);
+  polygon.on('click', (e, s) => {
+    console.log('e :', s);
+  });
+  rect.on('click', (e, s) => {
+    console.log('e :', s);
+  });
+  arc.on('click', (e, s) => {
+    console.log('e :', s);
+  });
+  can.add(rect);
+  can.add(arc);
   can.add(polygon);
   // await wait(1000);
   // rect.set('fillStyle', 'blue');

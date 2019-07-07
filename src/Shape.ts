@@ -17,9 +17,10 @@ export interface CanvasStyles
   lineJoin?: CanvasPathDrawingStyles['lineJoin'];
   lineWidth?: CanvasPathDrawingStyles['lineWidth'];
   miterLimit?: CanvasPathDrawingStyles['miterLimit'];
-  // 自定义样式
-  rotate?: number;
-  translate?: [number, number];
+  // transform
+  rotate?: Parameters<CanvasTransform['rotate']>[0];
+  translate?: Parameters<CanvasTransform['translate']>;
+  scale?: Parameters<CanvasTransform['scale']>;
 }
 
 export type CanvasStylesKeys = keyof CanvasStyles;
@@ -49,6 +50,7 @@ export interface ShapeAttrs extends CanvasStyles {
   x: number;
   y: number;
 }
+type ShapeAttrsKeys = keyof ShapeAttrs;
 /**
  * basic shape class for rect circle path...
  * Shape extends eventEmitter to store and fire events
@@ -73,11 +75,11 @@ export default abstract class Shape<
   render(ctx: CanvasRenderingContext2D): void {
     throw new Error('render method not implemented');
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
+  isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number): boolean {
     throw new Error('isPointInShape method not implemented');
   }
-  set = (key: CanvasStylesKeys, value: any) => {
-    this.attrs[key] = value;
+  set = (key: ShapeAttrsKeys, value: unknown) => {
+    assign(this.attrs, { key: value });
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   };
   fillOrStroke(ctx: CanvasRenderingContext2D, path?: Path2D) {
@@ -96,16 +98,20 @@ export function applyCanvasStyleToContext(
   ..._attrs: Partial<ShapeAttrs>[]
 ) {
   const attrs = <ShapeAttrs>assign({}, ..._attrs.map(cloneDeep));
-  const { rotate, translate, x, y } = attrs;
-  for (const key in attrs) {
-    if (attrs.hasOwnProperty(key) && canvasStylesMap[key]) {
+  const { rotate, translate, scale, x, y, ...rest } = attrs;
+  for (const key in rest) {
+    if (rest.hasOwnProperty(key) && canvasStylesMap[key]) {
       // @ts-ignore
-      ctx[key] = attrs[key];
+      ctx[key] = rest[key];
     }
   }
+  if (translate) {
+    ctx.translate(...translate);
+  }
   if (rotate) {
-    // ctx.translate(x, y)
     ctx.rotate(rotate);
   }
-  if (translate) ctx.translate(...translate);
+  if (scale) {
+    ctx.scale(...scale);
+  }
 }

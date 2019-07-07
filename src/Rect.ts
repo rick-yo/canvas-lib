@@ -20,8 +20,6 @@ export default class Rect extends Shape<RectAttrs> {
       width,
       height,
       radius = [],
-      strokeStyle,
-      fillStyle,
     } = this.attrs;
     const [leftTop = 0, rightTop = 0, rightBottom = 0, leftBottom = 0] = radius;
     this.path = new Path2D();
@@ -82,7 +80,6 @@ export default class Rect extends Shape<RectAttrs> {
     this.path.closePath();
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { strokeStyle, fillStyle } = this.attrs;
     this.makeRectPath(ctx);
     this.fillOrStroke(ctx, this.path)
   }

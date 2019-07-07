@@ -29,7 +29,6 @@ export default class Arc extends Shape<ArcAttrs> {
     this.path.closePath();
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { strokeStyle, fillStyle } = this.attrs;
     this.makeArcPath(ctx);
     this.fillOrStroke(ctx, this.path)
   }

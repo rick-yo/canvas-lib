@@ -15,12 +15,6 @@ export default class Polygon extends Shape<PolygonAttrs> {
   }
   makePolygonPath = () => {
     const {
-      x,
-      y,
-      strokeStyle,
-      fillStyle,
-      anticlockwise = false,
-      radius,
       sides,
     } = this.attrs;
     this.path = new Path2D();

@@ -18,7 +18,7 @@ type MouseEventType =
   | 'mouseover'
   | 'mouseup';
 
-  const MOUSE_EVENTS: MouseEventType[] = [
+const MOUSE_EVENTS: MouseEventType[] = [
   'click',
   'auxclick',
   'contextmenu',
@@ -95,11 +95,14 @@ export default class Canvas extends EventEmitter {
   }
   private _emitShapeEvents = (e: MouseEvent) => {
     const { offsetX, offsetY } = e;
-    const shape = this.shapes.reverse().find(item => {
-      return item.isPointInShape(this.ctx, offsetX, offsetY);
-    });
-    if (shape) {
-      shape.emit(e.type, e, shape);
+    const len = this.shapes.length;
+    // 从后往前遍历，找到 "z-index" 最大的
+    for (let index = len - 1; index >= 0; index--) {
+      const shape = this.shapes[index];
+      if (shape.isPointInShape(this.ctx, offsetX, offsetY)) {
+        shape.emit(e.type, e, shape);
+        break;
+      }
     }
   };
 }
