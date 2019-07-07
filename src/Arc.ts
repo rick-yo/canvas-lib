@@ -31,12 +31,7 @@ export default class Arc extends Shape<ArcAttrs> {
   render(ctx: CanvasRenderingContext2D) {
     const { strokeStyle, fillStyle } = this.attrs;
     this.makeArcPath(ctx);
-    if (strokeStyle) {
-      ctx.stroke(this.path);
-    }
-    if (fillStyle) {
-      ctx.fill(this.path);
-    }
+    this.fillOrStroke(ctx, this.path)
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
     return ctx.isPointInPath(this.path, px, py);

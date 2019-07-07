@@ -84,12 +84,7 @@ export default class Rect extends Shape<RectAttrs> {
   render(ctx: CanvasRenderingContext2D) {
     const { strokeStyle, fillStyle } = this.attrs;
     this.makeRectPath(ctx);
-    if (strokeStyle) {
-      ctx.stroke(this.path);
-    }
-    if (fillStyle) {
-      ctx.fill(this.path);
-    }
+    this.fillOrStroke(ctx, this.path)
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
     return ctx.isPointInPath(this.path, px, py);

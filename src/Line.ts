@@ -18,7 +18,7 @@ export default class Line extends Shape<LineAttrs> {
     this.path = new Path2D()
     this.path.moveTo(x, y);
     this.path.lineTo(x1, y1);
-    ctx.stroke(this.path);
+    this.fillOrStroke(ctx, this.path)
   }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
     return ctx.isPointInPath(this.path, px, py);

@@ -80,15 +80,22 @@ export default abstract class Shape<
     this.attrs[key] = value;
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   };
+  fillOrStroke(ctx: CanvasRenderingContext2D, path?: Path2D) {
+    const { strokeStyle, fillStyle } = this.attrs;
+    if (strokeStyle) {
+      path ? ctx.stroke(path) : ctx.stroke();
+    }
+    if (fillStyle) {
+      path ? ctx.fill(path) : ctx.fill();
+    }
+  }
 }
 
 export function applyCanvasStyleToContext(
   ctx: CanvasRenderingContext2D,
-  ..._attrs: ShapeAttrs[]
+  ..._attrs: Partial<ShapeAttrs>[]
 ) {
-  const attrs = <ShapeAttrs>(
-    assign({}, ..._attrs.map(cloneDeep))
-  );
+  const attrs = <ShapeAttrs>assign({}, ..._attrs.map(cloneDeep));
   const { rotate, translate, x, y } = attrs;
   for (const key in attrs) {
     if (attrs.hasOwnProperty(key) && canvasStylesMap[key]) {

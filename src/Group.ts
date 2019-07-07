@@ -28,10 +28,13 @@ export default class Group extends Shape<GroupAttrs> {
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
   render(ctx: CanvasRenderingContext2D) {
+    const { x, y, ...rest } = this.attrs
     this.shapes.forEach(shape => {
       ctx.save();
-      // group 需要特殊处理
-      applyCanvasStyleToContext(ctx, this.attrs, shape.attrs);
+      // 特殊处理，group内shape实际坐标 = group.x + shape.x，所以要将坐标轴移动
+      // 同样group内shape的实际样式 = assign(group.attr, shape.attr)
+      ctx.translate(x, y)
+      applyCanvasStyleToContext(ctx, rest, shape.attrs);
       shape.render(ctx);
       ctx.restore();
     });

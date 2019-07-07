@@ -39,6 +39,15 @@ export default class Text extends Shape<TextAttrs> {
     }
     ctx.fillText(`${currentText}${ellipsis}`, x, y);
   }
+  fillOrStrokeText(ctx: CanvasRenderingContext2D, acturalText: string) {
+    const { x, y, text, fillStyle, strokeStyle } = this.attrs;
+    if (fillStyle) {
+      ctx.fillText(acturalText, x, y)
+    }
+    if (strokeStyle) {
+      ctx.strokeText(acturalText, x, y)
+    }
+  }
   isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
     const { x, y, width, height } = this.attrs;
     if (!width || !height) return false;
