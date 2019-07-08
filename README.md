@@ -1,5 +1,5 @@
 # canvas-lib
-canvas library with a delightful API.
+Canvas library with a delightful API.
 
 # Feature
 * support all kinds of shapes, draw with no side-effect
@@ -9,6 +9,8 @@ canvas library with a delightful API.
 * support basic animation
 
 # API
+
+[See here](https://luv-sic.github.io/canvas-lib/)
 
 # example
 ```JavaScript
