@@ -1,15 +1,13 @@
-import Shape, { ShapeAttrs } from './Shape';
+import Shape, { ShapeAttrs, MousePosition } from './Shape';
 import inRange from 'lodash/inRange';
 
 export interface TextAttrs extends ShapeAttrs {
   text: string;
   font?: string;
   maxWidth?: number;
-  width?: number;
-  height?: number;
 }
 
-export default class Text extends Shape<TextAttrs> {
+export default class Text<D = any> extends Shape<TextAttrs, D> {
   type = 'text';
   /**
    * Creates an instance of Text shape.
@@ -21,7 +19,8 @@ export default class Text extends Shape<TextAttrs> {
     super(attrs);
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { x, y, text, font } = this.attrs;
+    const { text, font } = this.attrs;
+    const [x, y] = this._getPositionFromShape();
     let { width, maxWidth, height } = this.attrs;
     if (font) {
       ctx.font = font;
@@ -54,9 +53,7 @@ export default class Text extends Shape<TextAttrs> {
       ctx.strokeText(acturalText, x, y);
     }
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
-    const { x, y, width, height } = this.attrs;
-    if (!width || !height) return false;
-    return inRange(px, x, x + width) && inRange(py, y, y + height);
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition): boolean {
+    return this._isPointInShapeContent(ctx, e);
   }
 }

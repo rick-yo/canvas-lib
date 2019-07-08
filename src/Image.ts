@@ -1,4 +1,4 @@
-import Shape, { ShapeAttrs } from './Shape';
+import Shape, { ShapeAttrs, MousePosition } from './Shape';
 import inRange from 'lodash/inRange';
 
 export interface ImageAttrs extends ShapeAttrs {
@@ -12,7 +12,7 @@ export interface ImageAttrs extends ShapeAttrs {
  * @class Image
  * @extends {Shape<ImageAttrs>}
  */
-export default class Image extends Shape<ImageAttrs> {
+export default class Image<D = any> extends Shape<ImageAttrs, D> {
   type = 'image';
   /**
    * Creates an instance of Image shape.
@@ -23,11 +23,11 @@ export default class Image extends Shape<ImageAttrs> {
     super(attrs);
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { x, y, width, height, image } = this.attrs;
+    const { width, height, image } = this.attrs;
+    const [x, y] = this._getPositionFromShape();
     ctx.drawImage(image, x, y, width, height);
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
-    const { x, y, width, height, image } = this.attrs;
-    return inRange(px, x, x + width) && inRange(py, y, y + height);
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition) {
+    return this._isPointInShapeContent(ctx, e)
   }
 }

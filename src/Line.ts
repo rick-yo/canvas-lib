@@ -1,14 +1,12 @@
-import Shape, { ShapeAttrs } from './Shape';
-import inRange from 'lodash/inRange';
+import Shape, { ShapeAttrs, MousePosition } from './Shape';
 
 export interface LineAttrs extends ShapeAttrs {
   x1: number;
   y1: number;
 }
 
-export default class Line extends Shape<LineAttrs> {
+export default class Line<D = any> extends Shape<LineAttrs, D> {
   type = 'line';
-  path = new Path2D();
   /**
    * Creates an instance of Line shape.
    * @param {LineAttrs} attrs
@@ -18,14 +16,19 @@ export default class Line extends Shape<LineAttrs> {
     super(attrs);
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { x, y, x1, y1, lineWidth } = this.attrs;
+    const { lineWidth } = this.attrs;
     // renew path so that rerender won't get old path object
+    const [x, y] = this._getPositionFromShape();
+    const [x1, y1] = this._getPositionFromShape([
+      this.get('x1'),
+      this.get('y1'),
+    ]);
     this.path = new Path2D();
     this.path.moveTo(x, y);
     this.path.lineTo(x1, y1);
     this.fillOrStroke(ctx, this.path);
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
-    return ctx.isPointInPath(this.path, px, py);
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition) {
+    return this._isPointInShapePath(ctx, e)
   }
 }

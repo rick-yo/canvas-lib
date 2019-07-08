@@ -1,5 +1,5 @@
 import inRange from 'lodash/inRange';
-import Shape, { ShapeAttrs } from './Shape';
+import Shape, { ShapeAttrs, MousePosition } from './Shape';
 
 export interface PolygonAttrs extends ShapeAttrs {
   radius: number;
@@ -7,9 +7,8 @@ export interface PolygonAttrs extends ShapeAttrs {
   anticlockwise?: boolean;
 }
 
-export default class Polygon extends Shape<PolygonAttrs> {
+export default class Polygon<D = any> extends Shape<PolygonAttrs, D> {
   type = 'polygon';
-  path = new Path2D();
   /**
    * Creates an instance of Polygon shape.
    * @param {PolygonAttrs} attrs
@@ -19,9 +18,7 @@ export default class Polygon extends Shape<PolygonAttrs> {
     super(attrs);
   }
   makePolygonPath = () => {
-    const {
-      sides,
-    } = this.attrs;
+    const { sides } = this.attrs;
     this.path = new Path2D();
     for (let index = 0; index < sides; index++) {
       const angle = ((Math.PI * 2) / sides) * index;
@@ -31,7 +28,8 @@ export default class Polygon extends Shape<PolygonAttrs> {
     this.path.closePath();
   };
   _getPolygonPoint = (angle: number): [number, number] => {
-    const { x, y, radius, sides } = this.attrs;
+    const { radius, sides } = this.attrs;
+    const [x, y] = this._getPositionFromShape();
     const px = Math.sin(angle) * radius + x;
     const py = y - Math.cos(angle) * radius;
     return [px, py];
@@ -39,6 +37,7 @@ export default class Polygon extends Shape<PolygonAttrs> {
   render(ctx: CanvasRenderingContext2D) {
     const { strokeStyle, fillStyle } = this.attrs;
     this.makePolygonPath();
+    if (!this.path) return;
     if (strokeStyle) {
       ctx.stroke(this.path);
     }
@@ -46,7 +45,7 @@ export default class Polygon extends Shape<PolygonAttrs> {
       ctx.fill(this.path);
     }
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
-    return ctx.isPointInPath(this.path, px, py);
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition) {
+    return this._isPointInShapePath(ctx, e);
   }
 }

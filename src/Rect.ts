@@ -1,5 +1,5 @@
 import inRange from 'lodash/inRange';
-import Shape, { ShapeAttrs } from './Shape';
+import Shape, { ShapeAttrs, MousePosition } from './Shape';
 
 export interface RectAttrs extends ShapeAttrs {
   radius?: number[];
@@ -7,9 +7,8 @@ export interface RectAttrs extends ShapeAttrs {
   height: number;
 }
 
-export default class Rect extends Shape<RectAttrs> {
+export default class Rect<D = any> extends Shape<RectAttrs, D> {
   type = 'rect';
-  path = new Path2D();
   /**
    * Creates an instance of Rect shape.
    * @param {RectAttrs} attrs
@@ -19,7 +18,8 @@ export default class Rect extends Shape<RectAttrs> {
     super(attrs);
   }
   makeRectPath(ctx: CanvasRenderingContext2D) {
-    const { x, y, width, height, radius = [] } = this.attrs;
+    const { width, height, radius = [] } = this.attrs;
+    const [x, y] = this._getPositionFromShape();
     const [leftTop = 0, rightTop = 0, rightBottom = 0, leftBottom = 0] = radius;
     this.path = new Path2D();
     // 左上角
@@ -80,9 +80,10 @@ export default class Rect extends Shape<RectAttrs> {
   }
   render(ctx: CanvasRenderingContext2D) {
     this.makeRectPath(ctx);
+    if (!this.path) return;
     this.fillOrStroke(ctx, this.path);
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, px: number, py: number) {
-    return ctx.isPointInPath(this.path, px, py);
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition) {
+    return this._isPointInShapePath(ctx, e)
   }
 }

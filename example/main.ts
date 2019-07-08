@@ -1,7 +1,7 @@
 import Canvas from '../src/Canvas';
 import Rect from '../src/Rect';
 import Image from '../src/Image';
-import { Arc, Polygon } from '../src';
+import { Arc, Polygon, Group } from '../src';
 
 function wait(millSecond: number) {
   return new Promise(resolve => {
@@ -24,15 +24,19 @@ async function main() {
   const rect = new Rect({
     x: 30,
     y: 30,
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
     fillStyle: '#000',
     radius: [5, 5, 10, 20],
     shadowColor: '#000',
-    globalAlpha: 0.4,
-    shadowOffsetX: 0,
-    shadowOffsetY: 2,
-    shadowBlur: 4,
+  });
+  const rect1 = new Rect({
+    x: 130,
+    y: 30,
+    width: 100,
+    height: 100,
+    fillStyle: 'red',
+    radius: [5, 5, 10, 20],
   });
   const arc = new Arc({
     x: 100,
@@ -45,11 +49,8 @@ async function main() {
     x: 100,
     y: 100,
     radius: 50,
-    strokeStyle: 'green',
+    fillStyle: 'green',
     sides: 5,
-    // scale: [2,2],
-    // translate: [100, -100],
-    rotate: Math.PI / 20,
   });
   if (img) {
     const image = new Image({
@@ -64,19 +65,34 @@ async function main() {
     });
     can.add(image);
   }
+  const group = new Group({
+    x: 0,
+    y: 0,
+  });
 
   polygon.on('click', (e, s) => {
     console.log('e :', s);
   });
+
+  rect.setData({});
   rect.on('click', (e, s) => {
-    console.log('e :', s);
+    console.log('rect');
+  });
+  rect1.on('click', (e, s) => {
+    console.log('rect1');
   });
   arc.on('click', (e, s) => {
     console.log('e :', s);
   });
-  can.add(rect);
-  can.add(arc);
-  can.add(polygon);
+  group.add(rect);
+  group.add(rect1);
+  group.add(arc);
+  group.add(polygon);
+  can.add(group);
+  // arc.set('anticlockwise', false)
+  // can.add(rect);
+  // can.add(arc);
+  // can.add(polygon);
   // await wait(1000);
   // rect.set('fillStyle', 'blue');
   // await wait(1500);
