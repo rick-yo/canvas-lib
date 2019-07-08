@@ -2,13 +2,14 @@
   "name": "canvas-lib",
   "version": "0.0.1",
   "description": "canvas library with a delightful API",
-  "main": "src/index.ts",
+  "main": "dist/lib/index.js",
   "typings": "dist/types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel example/index.html --open",
     "build": "tsc --module commonjs",
-    "prebuild": "rm -rf dist types"
+    "prebuild": "rm -rf dist types",
+    "site": "typedoc --excludeNotExported --excludePrivate --excludeProtected --readme README.MD --theme minimal --out docs --target es6 --theme minimal --mode file src"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.135",
+    "typedoc": "^0.14.2",
     "typescript": "^3.5.2"
   }
 }

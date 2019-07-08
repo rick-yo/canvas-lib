@@ -19,7 +19,7 @@ export default class Arc<D = any> extends Shape<ArcAttrs, D> {
   constructor(attrs: ArcAttrs) {
     super(attrs);
   }
-  makeArcPath(ctx: CanvasRenderingContext2D) {
+  private makeArcPath(ctx: CanvasRenderingContext2D) {
     const {
       startAngle = 0,
       endAngle = PI2,

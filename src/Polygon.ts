@@ -17,7 +17,7 @@ export default class Polygon<D = any> extends Shape<PolygonAttrs, D> {
   constructor(attrs: PolygonAttrs) {
     super(attrs);
   }
-  makePolygonPath = () => {
+  private makePolygonPath = () => {
     const { sides } = this.attrs;
     this.path = new Path2D();
     for (let index = 0; index < sides; index++) {
@@ -27,7 +27,7 @@ export default class Polygon<D = any> extends Shape<PolygonAttrs, D> {
     }
     this.path.closePath();
   };
-  _getPolygonPoint = (angle: number): [number, number] => {
+  private _getPolygonPoint = (angle: number): [number, number] => {
     const { radius, sides } = this.attrs;
     const [x, y] = this._getPositionFromShape();
     const px = Math.sin(angle) * radius + x;

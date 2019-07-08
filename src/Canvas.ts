@@ -33,8 +33,7 @@ const MOUSE_EVENTS: MouseEventType[] = [
 
 /**
  * Canvas is shape's container, it can `add` or `remove` shape,
- * when you add a shape, canvas apply shape's attrs to current context, and render the shape to canvas
- * Canvas delegate event like click, mousemove, and dispatch event to the right shape
+ * Canvas delegate events like click, mousemove, and dispatch event to the right shape
  *
  * @export
  * @class Canvas
@@ -51,6 +50,13 @@ export default class Canvas extends EventEmitter {
     this._initMouseEvents();
     this._initCanvasRerenderEvent();
   }
+
+  /**
+   * Add a shape to Canvas and render
+   *
+   * @param {Shape} shape
+   * @memberof Canvas
+   */
   add(shape: Shape) {
     this.shapes.push(shape);
     shape.canvas = this;
@@ -59,23 +65,40 @@ export default class Canvas extends EventEmitter {
     shape.render(this.ctx);
     this.ctx.restore();
   }
+  /**
+   * Remove a shape from Canvas
+   *
+   * @param {Shape} shape
+   * @memberof Canvas
+   */
   remove(shape: Shape) {
     const index = this.shapes.indexOf(shape);
     if (index > -1) {
       this.shapes.splice(index, 1);
     }
-    this.render();
+    this._render();
   }
+  /**
+   * Remove all shapes from Canvas
+   *
+   * @memberof Canvas
+   */
   clear() {
     this.shapes = [];
     this.clearCanvas();
   }
+  /**
+   * Clear Canvas
+   *
+   * @returns
+   * @memberof Canvas
+   */
   clearCanvas() {
     const canvas = this.ctx.canvas;
     if (!canvas) return;
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
-  render = () => {
+  private _render = () => {
     this.clearCanvas();
     this.shapes.forEach(shape => {
       this.ctx.save();
@@ -92,7 +115,7 @@ export default class Canvas extends EventEmitter {
     this.ctx.scale(pixelRatio, pixelRatio);
   };
   private _initCanvasRerenderEvent = () => {
-    this.on(CANVAS_RERENDER_EVENT_TYPE, this.render);
+    this.on(CANVAS_RERENDER_EVENT_TYPE, this._render);
   };
   private _initMouseEvents() {
     if (!this.ctx.canvas) return;

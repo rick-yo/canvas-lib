@@ -44,7 +44,7 @@ export default class Text<D = any> extends Shape<TextAttrs, D> {
     }
     ctx.fillText(`${currentText}${ellipsis}`, x, y);
   }
-  fillOrStrokeText(ctx: CanvasRenderingContext2D, acturalText: string) {
+  private fillOrStrokeText(ctx: CanvasRenderingContext2D, acturalText: string) {
     const { x, y, text, fillStyle, strokeStyle } = this.attrs;
     if (fillStyle) {
       ctx.fillText(acturalText, x, y);

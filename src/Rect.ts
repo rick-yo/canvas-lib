@@ -17,7 +17,7 @@ export default class Rect<D = any> extends Shape<RectAttrs, D> {
   constructor(attrs: RectAttrs) {
     super(attrs);
   }
-  makeRectPath(ctx: CanvasRenderingContext2D) {
+  private makeRectPath(ctx: CanvasRenderingContext2D) {
     const { width, height, radius = [] } = this.attrs;
     const [x, y] = this._getPositionFromShape();
     const [leftTop = 0, rightTop = 0, rightBottom = 0, leftBottom = 0] = radius;

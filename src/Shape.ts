@@ -29,7 +29,9 @@ export interface CanvasStyles
 
 export type CanvasStylesKeys = keyof CanvasStyles;
 
-export type MousePosition = Mutable<Pick<MouseEvent, 'offsetX' | 'offsetY' | 'type'>>;
+export type MousePosition = Mutable<
+  Pick<MouseEvent, 'offsetX' | 'offsetY' | 'type'>
+>;
 
 export const canvasStylesMap: Dictionary<boolean> = {
   fillStyle: true,
@@ -60,10 +62,9 @@ export interface ShapeAttrs extends CanvasStyles {
 }
 type ShapeAttrsKeys = keyof ShapeAttrs;
 /**
- * basic shape class for rect circle path...
+ * Basic shape class for rect circle path etc.
  * Shape extends eventEmitter to store and fire events
  * Shape store attrs and provide `render` method to draw the shape.
- * you can `set` shape's attrs and shape will rerender accrodding to the new attrs automatically
  *
  * @export
  * @abstract
@@ -79,31 +80,56 @@ export default abstract class Shape<
   canvas: Canvas | null = null;
   data?: D;
   parent: Group | null = null;
-  path: Path2D | null = null
+  path: Path2D | null = null;
+  /**
+   * Creates an instance of Shape with attrs.
+   * @param {P} attrs
+   * @memberof Shape
+   */
   constructor(attrs: P) {
     super();
     this.attrs = attrs;
   }
-  render(ctx: CanvasRenderingContext2D): void {
-    throw new Error('render method not implemented');
-  }
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition): boolean {
-    throw new Error('isPointInShape method not implemented');
-  }
+  /**
+   * Set shape's attrs and shape will rerender automatically.
+   *
+   * @template K
+   * @param {K} key
+   * @param {P[K]} value
+   */
   set = <K extends keyof P>(key: K, value: P[K]) => {
     assign(this.attrs, { key: value });
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   };
+  /**
+   * Get a attr
+   *
+   * @template K
+   * @param {K} key
+   * @returns
+   */
   get = <K extends keyof P>(key: K) => {
     return this.attrs[key];
   };
+  /**
+   * Store data in shape, you can get it in `on` callback later.
+   *
+   * @param {D} data
+   * @memberof Shape
+   */
   setData(data: D) {
     this.data = data;
   }
-  getData() {
+  /**
+   * Get stored data
+   *
+   * @returns {(D | undefined)}
+   * @memberof Shape
+   */
+  getData(): D | undefined {
     return this.data || undefined;
   }
-  fillOrStroke(ctx: CanvasRenderingContext2D, path?: Path2D) {
+  protected fillOrStroke(ctx: CanvasRenderingContext2D, path?: Path2D) {
     const { strokeStyle, fillStyle } = this.attrs;
     if (strokeStyle) {
       path ? ctx.stroke(path) : ctx.stroke();
@@ -112,7 +138,13 @@ export default abstract class Shape<
       path ? ctx.fill(path) : ctx.fill();
     }
   }
-  _getPositionFromShape(pos?: [number, number]): [number, number] {
+  render(ctx: CanvasRenderingContext2D): void {
+    throw new Error('render method not implemented');
+  }
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition): boolean {
+    throw new Error('isPointInShape method not implemented');
+  }
+  protected _getPositionFromShape(pos?: [number, number]): [number, number] {
     pos = pos || [this.get('x'), this.get('y')];
     if (this.parent) {
       pos[0] += this.parent.get('x');
@@ -120,12 +152,18 @@ export default abstract class Shape<
     }
     return pos;
   }
-  protected _isPointInShapePath(ctx: CanvasRenderingContext2D, e: MousePosition) {
-    if(!this.path) return false
+  protected _isPointInShapePath(
+    ctx: CanvasRenderingContext2D,
+    e: MousePosition,
+  ) {
+    if (!this.path) return false;
     const { offsetX, offsetY } = e;
     return ctx.isPointInPath(this.path, offsetX, offsetY);
   }
-  protected _isPointInShapeContent(ctx: CanvasRenderingContext2D, e: MousePosition) {
+  protected _isPointInShapeContent(
+    ctx: CanvasRenderingContext2D,
+    e: MousePosition,
+  ) {
     const { width, height } = this.attrs;
     if (!width || !height) return false;
     const [x, y] = this._getPositionFromShape();

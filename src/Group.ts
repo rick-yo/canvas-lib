@@ -21,11 +21,23 @@ export default class Group<D = any> extends Shape<GroupAttrs, D> {
   constructor(attrs: GroupAttrs) {
     super(attrs);
   }
+  /**
+   * Add a shape to group
+   *
+   * @param {Shape} shape
+   * @memberof Group
+   */
   add(shape: Shape) {
     this.shapes.push(shape);
     shape.parent = this;
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
+  /**
+   * Remove a shape from group
+   *
+   * @param {Shape} shape
+   * @memberof Group
+   */
   remove(shape: Shape) {
     const index = this.shapes.indexOf(shape);
     if (index > -1) {
@@ -38,8 +50,6 @@ export default class Group<D = any> extends Shape<GroupAttrs, D> {
     const { x, y, ...rest } = this.attrs;
     this.shapes.forEach(shape => {
       ctx.save();
-      // 会影响 `isPointInShape` 方法
-      // ctx.translate(x, y);
       // 特殊处理，group内shape实际坐标 = group.x + shape.x，所以要将坐标轴移动
       // 同样group内shape的实际样式 = assign(group.attr, shape.attr)
       applyShapeAttrsToContext(ctx, rest, shape.attrs);
