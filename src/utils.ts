@@ -1,7 +1,7 @@
 const prefix = '[canvas-lib]: ';
 export const pixelRatio = Math.round(window.devicePixelRatio || 1);
 
-export function pxByRatio(px: number) {
+export function pxByPixelRatio(px: number) {
   return Math.round(pixelRatio * px);
 }
 

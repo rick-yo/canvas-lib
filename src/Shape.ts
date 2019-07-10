@@ -4,7 +4,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import assign from 'lodash/assign';
 import { Dictionary } from 'lodash';
 import Group from './Group';
-import { Mutable, pxByRatio, raiseError } from './utils';
+import { Mutable, pxByPixelRatio, raiseError, pixelRatio } from './utils';
 import inRange from 'lodash/inRange';
 
 export interface CanvasStyles
@@ -32,7 +32,7 @@ export type CanvasStylesKeys = keyof CanvasStyles;
 export type MousePosition = Mutable<
   Pick<MouseEvent, 'offsetX' | 'offsetY' | 'type'>
 > & {
-  // target: Shape<any>;
+  target?: Shape<any>;
 };
 
 export const canvasStylesMap: Dictionary<boolean> = {
@@ -88,8 +88,8 @@ export default class Shape<
   type = 'shape';
   attrs: P;
   canvas: Canvas | null = null;
+  group: Group | null = null;
   data: any;
-  parent: Group | null = null;
   path: Path2D | null = null;
   /**
    * Creates an instance of Shape with attrs.
@@ -114,12 +114,17 @@ export default class Shape<
   protected _setAttr = <K extends keyof P>(key: K, value: P[K]) => {
     this.attrs[key] = value;
   };
-  // return real attr, affected by group and scale
+  /**
+   * get shape's real attr, affected by group and scale
+   *
+   * @param {keyof P} key
+   * @returns
+   */
   protected _getAttr = (key: keyof P) => {
     // @ts-ignore
     if (INT_ATTR_KEYS.indexOf(key) > -1) {
       // @ts-ignore
-      return pxByRatio(this.attrs[key]);
+      return pxByPixelRatio(this.attrs[key]);
     }
     return this.attrs[key];
   };
@@ -151,6 +156,14 @@ export default class Shape<
   getData(): any {
     return this.data;
   }
+  /**
+   * fill or stroke a path
+   *
+   * @protected
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {Path2D} [path]
+   * @memberof Shape
+   */
   protected fillOrStroke(ctx: CanvasRenderingContext2D, path?: Path2D) {
     const { strokeStyle, fillStyle } = this.attrs;
     if (strokeStyle) {
@@ -163,16 +176,24 @@ export default class Shape<
   render(ctx: CanvasRenderingContext2D): void {
     raiseError('render method not implemented');
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition): boolean {
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent): boolean {
     raiseError('isPointInShape method not implemented');
     return false;
   }
-  protected _getPositionFromShape(pos?: [number, number]): [number, number] {
+  /**
+   * get shape's real postion, sum up shape.group, used in shape.render and mouse event detection
+   *
+   * @protected
+   * @param {[number, number]} [pos]
+   * @returns {[number, number]}
+   * @memberof Shape
+   */
+  protected _getShapePosition(pos?: [number, number]): [number, number] {
     // 特殊处理，group内shape实际坐标 = group.x + shape.x，所以要将坐标轴移动
     pos = pos || [this.get('x'), this.get('y')];
-    if (this.parent) {
-      pos[0] += this.parent.get('x');
-      pos[1] += this.parent.get('y');
+    if (this.group) {
+      pos[0] += this.group.get('x');
+      pos[1] += this.group.get('y');
     }
     return pos;
   }
@@ -183,28 +204,52 @@ export default class Shape<
   protected _getMousePosition(e: MouseEvent): MousePosition {
     const { offsetX, offsetY, type } = e;
     const position: MousePosition = {
-      offsetX: pxByRatio(offsetX),
-      offsetY: pxByRatio(offsetY),
+      offsetX,
+      offsetY,
       type,
-      // target: this,
+      target: this,
     };
     return position;
   }
-  protected _isPointInShapePath(ctx: CanvasRenderingContext2D, e: MousePosition) {
+  /**
+   * check if mouse event fired in this shape's path.
+   * As path' draw style affected by pixel ratio, this will scaled mouse event position by pixel ratio
+   *
+   * @protected
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {MouseEvent} e
+   * @returns
+   * @memberof Shape
+   */
+  protected _isPointInShapePath(
+    ctx: CanvasRenderingContext2D,
+    e: MouseEvent,
+  ) {
     if (!this.path) return false;
     const { offsetX, offsetY } = e;
-    return ctx.isPointInPath(this.path, offsetX, offsetY);
+    return ctx.isPointInPath(this.path, pxByPixelRatio(offsetX), pxByPixelRatio(offsetY));
   }
-  protected _isPointInShapeContent(e: MousePosition) {
+  /**
+   * check if mouse event fired in this shape's content
+   *
+   * @protected
+   * @param {MouseEvent} e
+   * @returns
+   * @memberof Shape
+   */
+  protected _isPointInShapeContent(e: MouseEvent) {
     const width = this.get('width');
     const height = this.get('height');
     if (!width || !height) return false;
-    const [x, y] = this._getPositionFromShape().map(pxByRatio)
+    const [x, y] = this._getShapePosition();
     const { offsetX, offsetY } = e;
     return (
-      inRange(offsetX, x, x + pxByRatio(width as number)) &&
-      inRange(offsetY, y, y + pxByRatio(height as number))
+      inRange(offsetX, x, x + (width as number)) &&
+      inRange(offsetY, y, y + (height as number))
     );
+  }
+  protected _emitCanvasRerender() {
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
 }
 

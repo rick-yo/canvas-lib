@@ -24,10 +24,10 @@ export default class Image extends Shape<ImageAttrs> {
   }
   render(ctx: CanvasRenderingContext2D) {
     const { width, height, image } = this.attrs;
-    const [x, y] = this._getPositionFromShape();
+    const [x, y] = this._getShapePosition();
     ctx.drawImage(image, x, y, width, height);
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition) {
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent) {
     return this._isPointInShapeContent(e)
   }
 }

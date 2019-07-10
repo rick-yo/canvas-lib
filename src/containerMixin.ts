@@ -10,7 +10,7 @@ const containerMixin = <T>(Base: Class<any>) => class extends Base {
   remove(shape: Shape) {
     const index = this.shapes.indexOf(shape);
     if (index > -1) {
-      this.shapes[index].parent = null;
+      this.shapes[index].group = null;
       this.shapes.splice(index, 1);
     }
   }

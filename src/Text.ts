@@ -20,7 +20,7 @@ export default class Text extends Shape<TextAttrs> {
   }
   render(ctx: CanvasRenderingContext2D) {
     const { text, font } = this.attrs;
-    const [x, y] = this._getPositionFromShape();
+    const [x, y] = this._getShapePosition();
     let { width, maxWidth, height } = this.attrs;
     if (font) {
       ctx.font = font;
@@ -61,7 +61,7 @@ export default class Text extends Shape<TextAttrs> {
       ctx.strokeText(acturalText, x, y);
     }
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition): boolean {
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent): boolean {
     return this._isPointInShapeContent(e);
   }
 }

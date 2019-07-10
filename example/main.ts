@@ -71,7 +71,7 @@ async function main() {
   }
   const line = new Line({
     x: 500,
-    y: 200,
+    y: 300,
     x1: 300,
     y1: 200,
     lineWidth: 30,
@@ -88,23 +88,23 @@ async function main() {
     y: 50,
     font: '48px serif',
   });
-  text.on('click', (e, s) => {
-    console.log('text :', s);
+  text.on('click', (e) => {
+    console.log(e);
   });
   can.add(text);
-  polygon.on('click', (e, s) => {
-    console.log('e :', s);
+  polygon.on('click', (e) => {
+    console.log(e);
   });
 
-  rect.on('click', (e, s) => {
-    console.log('rect');
+  rect.on('click', (e) => {
+    console.log(e);
   });
-  rect1.on('click', (e, s) => {
+  rect1.on('click', (e) => {
     rect1.set('fillStyle', 'blue');
-    console.log('rect1 :', rect1);
+    console.log(e);
   });
-  arc.on('click', (e, s) => {
-    console.log('e :', s);
+  arc.on('click', (e) => {
+    console.log(e);
   });
   group.add(rect1);
   group.add(rect);

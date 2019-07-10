@@ -5,7 +5,7 @@ import Shape, {
   MousePosition,
 } from './Shape';
 import containerMixin from './containerMixin';
-import { pxByRatio } from './utils';
+import { pxByPixelRatio } from './utils';
 
 export interface GroupAttrs extends ShapeAttrs {}
 /**
@@ -31,7 +31,7 @@ export default class Group extends containerMixin(Shape) {
    */
   add(shape: Shape) {
     super.add(shape);
-    // this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
   /**
    * Remove a shape from group
@@ -42,14 +42,22 @@ export default class Group extends containerMixin(Shape) {
   remove(shape: Shape) {
     super.remove(shape);
     shape.canvas = null;
-    // this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
+    shape.group = null
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
+  /**
+   * overwrite shape.render, will render all Group.shapes, it apply group and shape's attr to context
+   * `render` will set shape.group to this group and shape.canvas to this.group.canvas
+   *
+   * @param {CanvasRenderingContext2D} ctx
+   * @memberof Group
+   */
   render(ctx: CanvasRenderingContext2D) {
     const { x, y, ...rest } = this.attrs;
     this.shapes.forEach(shape => {
       ctx.save();
       // rerender canvas
-      shape.parent = this;
+      shape.group = this;
       shape.canvas = this.canvas;
       // group内shape的实际样式 = assign(group.attr, shape.attr)
       applyShapeAttrsToContext(ctx, rest, shape.attrs);
@@ -57,14 +65,20 @@ export default class Group extends containerMixin(Shape) {
       ctx.restore();
     });
   }
-  // 特殊处理 group 会再次分发事件
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition) {
-    const { offsetX, offsetY, type } = e;
+  /**
+   * special case, will dispatch original mouse event to Group.shapes
+   *
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {MouseEvent} e
+   * @returns
+   * @memberof Group
+   */
+  isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent) {
     const len = this.shapes.length;
     for (let index = len - 1; index >= 0; index--) {
       const shape = this.shapes[index];
       if (shape.isPointInShape(ctx, e)) {
-        shape.emit(e.type, e, shape);
+        shape._emitMouseEvent(e)
         break;
       }
     }
