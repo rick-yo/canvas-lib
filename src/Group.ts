@@ -4,6 +4,8 @@ import Shape, {
   applyShapeAttrsToContext,
   MousePosition,
 } from './Shape';
+import containerMixin from './containerMixin';
+import { pxByRatio } from './utils';
 
 export interface GroupAttrs extends ShapeAttrs {}
 /**
@@ -15,7 +17,7 @@ export interface GroupAttrs extends ShapeAttrs {}
  * @class Group
  * @extends {Shape<GroupAttrs>}
  */
-export default class Group<D = any> extends Shape<GroupAttrs, D> {
+export default class Group extends containerMixin(Shape) {
   type = 'group';
   shapes: Shape[] = [];
   constructor(attrs: GroupAttrs) {
@@ -28,9 +30,8 @@ export default class Group<D = any> extends Shape<GroupAttrs, D> {
    * @memberof Group
    */
   add(shape: Shape) {
-    this.shapes.push(shape);
-    shape.parent = this;
-    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
+    super.add(shape);
+    // this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
   /**
    * Remove a shape from group
@@ -39,19 +40,18 @@ export default class Group<D = any> extends Shape<GroupAttrs, D> {
    * @memberof Group
    */
   remove(shape: Shape) {
-    const index = this.shapes.indexOf(shape);
-    if (index > -1) {
-      this.shapes[index].parent = null;
-      this.shapes.splice(index, 1);
-    }
-    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
+    super.remove(shape);
+    shape.canvas = null;
+    // this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
   render(ctx: CanvasRenderingContext2D) {
     const { x, y, ...rest } = this.attrs;
     this.shapes.forEach(shape => {
       ctx.save();
-      // 特殊处理，group内shape实际坐标 = group.x + shape.x，所以要将坐标轴移动
-      // 同样group内shape的实际样式 = assign(group.attr, shape.attr)
+      // rerender canvas
+      shape.parent = this;
+      shape.canvas = this.canvas;
+      // group内shape的实际样式 = assign(group.attr, shape.attr)
       applyShapeAttrsToContext(ctx, rest, shape.attrs);
       shape.render(ctx);
       ctx.restore();
@@ -59,6 +59,7 @@ export default class Group<D = any> extends Shape<GroupAttrs, D> {
   }
   // 特殊处理 group 会再次分发事件
   isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition) {
+    const { offsetX, offsetY, type } = e;
     const len = this.shapes.length;
     for (let index = len - 1; index >= 0; index--) {
       const shape = this.shapes[index];

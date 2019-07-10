@@ -1,6 +1,7 @@
 import Shape, { applyShapeAttrsToContext, MousePosition } from './Shape';
 import EventEmitter from './EventEmitter';
-import { pxByRatio, pixelRatio, Mutable } from './utils';
+import { pxByRatio, pixelRatio, Mutable, raiseError } from './utils';
+import containerMixin from './containerMixin';
 
 export const CANVAS_RERENDER_EVENT_TYPE = 'canvas:rerender';
 
@@ -38,19 +39,35 @@ const MOUSE_EVENTS: MouseEventType[] = [
  * @export
  * @class Canvas
  */
-export default class Canvas extends EventEmitter {
+export default class Canvas extends containerMixin(EventEmitter) {
   ctx: CanvasRenderingContext2D;
   shapes: Shape[] = [];
   canvasElement: HTMLCanvasElement;
-  constructor(ctx: CanvasRenderingContext2D) {
+  width: number = 0;
+  height: number = 0;
+  constructor(
+    canvas: HTMLCanvasElement,
+    options: {
+      width: number;
+      height: number;
+    },
+  ) {
     super();
+    if (!canvas) {
+      raiseError('canvas not found');
+    }
+    this.canvasElement = canvas;
+    const ctx = this.canvasElement.getContext('2d');
+    if (!ctx) {
+      throw new Error('canvas context not found');
+    }
     this.ctx = ctx;
-    this.canvasElement = this.ctx.canvas;
+    this.width = options.width;
+    this.height = options.height;
     this._setupCanvas();
     this._initMouseEvents();
     this._initCanvasRerenderEvent();
   }
-
   /**
    * Add a shape to Canvas and render
    *
@@ -58,12 +75,8 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   add(shape: Shape) {
-    this.shapes.push(shape);
-    shape.canvas = this;
-    this.ctx.save();
-    applyShapeAttrsToContext(this.ctx, shape.attrs);
-    shape.render(this.ctx);
-    this.ctx.restore();
+    super.add(shape)
+    this._renderShape(shape)
   }
   /**
    * Remove a shape from Canvas
@@ -72,10 +85,8 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   remove(shape: Shape) {
-    const index = this.shapes.indexOf(shape);
-    if (index > -1) {
-      this.shapes.splice(index, 1);
-    }
+    super.remove(shape)
+    shape.canvas = null
     this._render();
   }
   /**
@@ -84,7 +95,8 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   clear() {
-    this.shapes = [];
+    this.shapes.forEach(shape => shape.canvas = null)
+    super.removeAll()
     this.clearCanvas();
   }
   /**
@@ -94,24 +106,27 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   clearCanvas() {
-    const canvas = this.ctx.canvas;
-    if (!canvas) return;
+    const canvas = this.canvasElement;
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
   private _render = () => {
     this.clearCanvas();
     this.shapes.forEach(shape => {
-      this.ctx.save();
-      applyShapeAttrsToContext(this.ctx, shape.attrs);
-      shape.render(this.ctx);
-      this.ctx.restore();
+      this._renderShape(shape)
     });
   };
+  _renderShape = (shape: Shape) => {
+    this.ctx.save();
+    shape.canvas = this;
+    applyShapeAttrsToContext(this.ctx, shape.attrs);
+    shape.render(this.ctx);
+    this.ctx.restore();
+  }
   private _setupCanvas = () => {
-    this.canvasElement.style.width = `${this.canvasElement.width}px`;
-    this.canvasElement.style.height = `${this.canvasElement.height}px`;
-    this.canvasElement.width = pxByRatio(this.canvasElement.width);
-    this.canvasElement.height = pxByRatio(this.canvasElement.height);
+    this.canvasElement.style.width = `${this.width}px`;
+    this.canvasElement.style.height = `${this.height}px`;
+    this.canvasElement.width = pxByRatio(this.width);
+    this.canvasElement.height = pxByRatio(this.height);
     this.ctx.scale(pixelRatio, pixelRatio);
   };
   private _initCanvasRerenderEvent = () => {
@@ -137,8 +152,9 @@ export default class Canvas extends EventEmitter {
     // 从后往前遍历，找到 "z-index" 最大的
     for (let index = len - 1; index >= 0; index--) {
       const shape = this.shapes[index];
+      if (!shape) continue;
       if (shape.isPointInShape(this.ctx, position)) {
-        shape.emit(e.type, e, shape);
+        shape.emit(type, e, shape);
         break;
       }
     }
