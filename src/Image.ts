@@ -12,7 +12,7 @@ export interface ImageAttrs extends ShapeAttrs {
  * @class Image
  * @extends {Shape<ImageAttrs>}
  */
-export default class Image<D = any> extends Shape<ImageAttrs, D> {
+export default class Image extends Shape<ImageAttrs> {
   type = 'image';
   /**
    * Creates an instance of Image shape.
@@ -28,6 +28,6 @@ export default class Image<D = any> extends Shape<ImageAttrs, D> {
     ctx.drawImage(image, x, y, width, height);
   }
   isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition) {
-    return this._isPointInShapeContent(ctx, e)
+    return this._isPointInShapeContent(e)
   }
 }

@@ -1,7 +1,8 @@
 import Canvas from '../src/Canvas';
 import Rect from '../src/Rect';
 import Image from '../src/Image';
-import { Arc, Polygon, Group } from '../src';
+import { Arc, Polygon, Group, Line, Text } from '../src';
+import { toNumber } from 'lodash';
 
 function wait(millSecond: number) {
   return new Promise(resolve => {
@@ -15,12 +16,15 @@ async function main() {
   const canvas = document.querySelector<HTMLCanvasElement>('#canvas');
   const img = document.querySelector<HTMLCanvasElement>('img');
   if (!canvas) return;
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  const can = new Canvas(ctx);
+  const can = new Canvas(canvas, {
+    width,
+    height,
+  });
   const rect = new Rect({
     x: 30,
     y: 30,
@@ -54,40 +58,59 @@ async function main() {
   });
   if (img) {
     const image = new Image({
-      x: 330,
-      y: 30,
+      x: 230,
+      y: 130,
       width: 200,
       height: 200,
       image: img,
     });
-    image.on('click', (e, shape) => {
-      console.log('e :', shape.attr);
+    image.on('click', (e) => {
+      console.log(e);
     });
     can.add(image);
   }
+  const line = new Line({
+    x: 500,
+    y: 200,
+    x1: 300,
+    y1: 200,
+    lineWidth: 30,
+    strokeStyle: '#000',
+  });
   const group = new Group({
     x: 0,
     y: 0,
   });
-
+  const text = new Text({
+    text: '测试测试测试测试',
+    // maxWidth: 100,
+    x: 20,
+    y: 50,
+    font: '48px serif',
+  });
+  text.on('click', (e, s) => {
+    console.log('text :', s);
+  });
+  can.add(text);
   polygon.on('click', (e, s) => {
     console.log('e :', s);
   });
 
-  rect.setData({});
   rect.on('click', (e, s) => {
     console.log('rect');
   });
   rect1.on('click', (e, s) => {
-    console.log('rect1');
+    rect1.set('fillStyle', 'blue');
+    console.log('rect1 :', rect1);
   });
   arc.on('click', (e, s) => {
     console.log('e :', s);
   });
-  group.add(rect);
   group.add(rect1);
+  group.add(rect);
   group.add(arc);
   group.add(polygon);
+  can.add(line);
   can.add(group);
   // arc.set('anticlockwise', false)
   // can.add(rect);

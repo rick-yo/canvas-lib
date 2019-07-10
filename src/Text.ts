@@ -7,7 +7,7 @@ export interface TextAttrs extends ShapeAttrs {
   maxWidth?: number;
 }
 
-export default class Text<D = any> extends Shape<TextAttrs, D> {
+export default class Text extends Shape<TextAttrs> {
   type = 'text';
   /**
    * Creates an instance of Text shape.
@@ -26,13 +26,20 @@ export default class Text<D = any> extends Shape<TextAttrs, D> {
       ctx.font = font;
     }
     // 手动计算高度
-    height = height || parseInt(ctx.font, 10);
+    const _font = font || ctx.font;
+    height = height || parseInt(_font, 10);
     width = ctx.measureText(text).width;
+    this._setAttr('width', width)
+    this._setAttr('height', height)
+    // 直接fill
     if (!maxWidth) {
       ctx.fillText(text, x, y);
       return;
     }
-    width = maxWidth;
+    if (width <= maxWidth) {
+      ctx.fillText(text, x, y);
+      return;
+    }
     const ellipsis = '...';
     const ellipsisWidth = ctx.measureText(ellipsis).width + 10;
     const _maxWidth = maxWidth - ellipsisWidth;
@@ -42,6 +49,7 @@ export default class Text<D = any> extends Shape<TextAttrs, D> {
       currentText = currentText.slice(0, currentText.length - 2);
       currentWidth = ctx.measureText(currentText).width;
     }
+    this._setAttr('width', width)
     ctx.fillText(`${currentText}${ellipsis}`, x, y);
   }
   private fillOrStrokeText(ctx: CanvasRenderingContext2D, acturalText: string) {
@@ -54,6 +62,6 @@ export default class Text<D = any> extends Shape<TextAttrs, D> {
     }
   }
   isPointInShape(ctx: CanvasRenderingContext2D, e: MousePosition): boolean {
-    return this._isPointInShapeContent(ctx, e);
+    return this._isPointInShapeContent(e);
   }
 }

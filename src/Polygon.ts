@@ -7,7 +7,7 @@ export interface PolygonAttrs extends ShapeAttrs {
   anticlockwise?: boolean;
 }
 
-export default class Polygon<D = any> extends Shape<PolygonAttrs, D> {
+export default class Polygon extends Shape<PolygonAttrs> {
   type = 'polygon';
   /**
    * Creates an instance of Polygon shape.

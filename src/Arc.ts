@@ -9,7 +9,7 @@ export interface ArcAttrs extends ShapeAttrs {
 }
 
 const PI2 = Math.PI * 2;
-export default class Arc<D = any> extends Shape<ArcAttrs, D> {
+export default class Arc extends Shape<ArcAttrs> {
   type = 'arc';
   /**
    * Creates an instance of Arc shape.

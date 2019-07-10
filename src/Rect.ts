@@ -7,7 +7,7 @@ export interface RectAttrs extends ShapeAttrs {
   height: number;
 }
 
-export default class Rect<D = any> extends Shape<RectAttrs, D> {
+export default class Rect extends Shape<RectAttrs> {
   type = 'rect';
   /**
    * Creates an instance of Rect shape.

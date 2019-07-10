@@ -5,7 +5,7 @@ export interface LineAttrs extends ShapeAttrs {
   y1: number;
 }
 
-export default class Line<D = any> extends Shape<LineAttrs, D> {
+export default class Line extends Shape<LineAttrs> {
   type = 'line';
   /**
    * Creates an instance of Line shape.
