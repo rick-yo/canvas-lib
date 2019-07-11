@@ -1,9 +1,10 @@
-import Shape, { applyShapeAttrsToContext, MousePosition } from './Shape';
-import EventEmitter from './EventEmitter';
-import { pxByPixelRatio, pixelRatio, Mutable, raiseError } from './utils';
-import containerMixin from './containerMixin';
+import Shape, { applyShapeAttrsToContext, MousePosition } from './Shape'
+import EventEmitter from './EventEmitter'
+import { pxByPixelRatio, pixelRatio, Mutable, raiseError } from './utils'
+import containerMixin from './ShapeContainer'
+import ShapeContainer from './ShapeContainer'
 
-export const CANVAS_RERENDER_EVENT_TYPE = 'canvas:rerender';
+export const CANVAS_RERENDER_EVENT_TYPE = 'canvas:rerender'
 
 type MouseEventType =
   | 'click'
@@ -15,7 +16,7 @@ type MouseEventType =
   | 'mousemove'
   | 'mouseout'
   | 'mouseover'
-  | 'mouseup';
+  | 'mouseup'
 
 const MOUSE_EVENTS: MouseEventType[] = [
   'click',
@@ -28,7 +29,7 @@ const MOUSE_EVENTS: MouseEventType[] = [
   'mouseout',
   'mouseover',
   'mouseup',
-];
+]
 
 /**
  * Canvas is shape's container, it can `add` or `remove` shape,
@@ -37,35 +38,35 @@ const MOUSE_EVENTS: MouseEventType[] = [
  * @export
  * @class Canvas
  */
-export default class Canvas extends containerMixin(EventEmitter) {
-  ctx: CanvasRenderingContext2D;
-  shapes: Shape[] = [];
-  canvasElement: HTMLCanvasElement;
-  width: number = 300;
-  height: number = 150;
-  pixelRatio: number = pixelRatio;
+export default class Canvas extends EventEmitter {
+  ctx: CanvasRenderingContext2D
+  canvasElement: HTMLCanvasElement
+  width: number = 300
+  height: number = 150
+  pixelRatio: number = pixelRatio
+  shapeContainer: ShapeContainer = new ShapeContainer()
   constructor(
     canvas: HTMLCanvasElement,
     options: {
-      width: number;
-      height: number;
+      width: number
+      height: number
     },
   ) {
-    super();
+    super()
     if (!canvas) {
-      raiseError('canvas not found');
+      raiseError('canvas not found')
     }
-    this.canvasElement = canvas;
-    const ctx = this.canvasElement.getContext('2d');
+    this.canvasElement = canvas
+    const ctx = this.canvasElement.getContext('2d')
     if (!ctx) {
-      throw new Error('canvas context not found');
+      throw new Error('canvas context not found')
     }
-    this.ctx = ctx;
-    this.width = options.width;
-    this.height = options.height;
-    this._setCanvasPixelRatio();
-    this._handleMouseEvents();
-    this._handleCanvasRerenderEvent();
+    this.ctx = ctx
+    this.width = options.width
+    this.height = options.height
+    this._setCanvasPixelRatio()
+    this._handleMouseEvents()
+    this._handleCanvasRerenderEvent()
   }
   /**
    * Add a shape to Canvas and render
@@ -74,8 +75,8 @@ export default class Canvas extends containerMixin(EventEmitter) {
    * @memberof Canvas
    */
   add(shape: Shape) {
-    super.add(shape);
-    this._renderShape(shape);
+    this.shapeContainer.add(shape)
+    this._renderShape(shape)
   }
   /**
    * Remove a shape from Canvas
@@ -84,9 +85,9 @@ export default class Canvas extends containerMixin(EventEmitter) {
    * @memberof Canvas
    */
   remove(shape: Shape) {
-    super.remove(shape);
-    shape.canvas = null;
-    this._render();
+    this.shapeContainer.remove(shape)
+    shape.canvas = null
+    this._render()
   }
   /**
    * Remove all shapes from Canvas
@@ -94,9 +95,9 @@ export default class Canvas extends containerMixin(EventEmitter) {
    * @memberof Canvas
    */
   clear() {
-    this.shapes.forEach(shape => (shape.canvas = null));
-    super.removeAll();
-    this.clearCanvas();
+    this.shapeContainer.getShapes().forEach(shape => (shape.canvas = null))
+    this.shapeContainer.removeAll()
+    this.clearCanvas()
   }
   /**
    * Clear Canvas
@@ -105,44 +106,44 @@ export default class Canvas extends containerMixin(EventEmitter) {
    * @memberof Canvas
    */
   clearCanvas() {
-    const canvas = this.canvasElement;
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const canvas = this.canvasElement
+    this.ctx.clearRect(0, 0, canvas.width, canvas.height)
   }
   private _render = () => {
-    this.clearCanvas();
-    this.shapes.forEach(shape => {
-      this._renderShape(shape);
-    });
-  };
+    this.clearCanvas()
+    this.shapeContainer.getShapes().forEach(shape => {
+      this._renderShape(shape)
+    })
+  }
   /**
    * apply shape's attr to context, after render, restore context
    *
    * @param {Shape} shape
    */
   _renderShape = (shape: Shape) => {
-    this.ctx.save();
-    shape.canvas = this;
-    applyShapeAttrsToContext(this.ctx, shape.attrs);
-    shape.render(this.ctx);
-    this.ctx.restore();
-  };
+    this.ctx.save()
+    shape.canvas = this
+    applyShapeAttrsToContext(this.ctx, shape.attrs())
+    shape.render(this.ctx)
+    this.ctx.restore()
+  }
   private _setCanvasPixelRatio = () => {
-    this.canvasElement.style.width = `${this.width}px`;
-    this.canvasElement.style.height = `${this.height}px`;
-    this.canvasElement.width = pxByPixelRatio(this.width);
-    this.canvasElement.height = pxByPixelRatio(this.height);
-    this.ctx.scale(pixelRatio, pixelRatio);
-  };
+    this.canvasElement.style.width = `${this.width}px`
+    this.canvasElement.style.height = `${this.height}px`
+    this.canvasElement.width = pxByPixelRatio(this.width)
+    this.canvasElement.height = pxByPixelRatio(this.height)
+    this.ctx.scale(pixelRatio, pixelRatio)
+  }
   private _handleCanvasRerenderEvent = () => {
-    this.on(CANVAS_RERENDER_EVENT_TYPE, this._render);
-  };
+    this.on(CANVAS_RERENDER_EVENT_TYPE, this._render)
+  }
   private _handleMouseEvents() {
     MOUSE_EVENTS.forEach(key => {
       this.canvasElement.addEventListener<MouseEventType>(
         key,
         this._emitShapeEvents,
-      );
-    });
+      )
+    })
   }
   /**
    * dispatch original mouse event to  Canvas.shapes
@@ -150,15 +151,16 @@ export default class Canvas extends containerMixin(EventEmitter) {
    * @param {MouseEvent} e
    */
   private _emitShapeEvents = (e: MouseEvent) => {
-    const len = this.shapes.length;
+    const shapes = this.shapeContainer.getShapes()
+    const len = shapes.length
     // 从后往前遍历，找到 "z-index" 最大的
     for (let index = len - 1; index >= 0; index--) {
-      const shape = this.shapes[index];
-      if (!shape) continue;
+      const shape = shapes[index]
+      if (!shape) continue
       if (shape.isPointInShape(this.ctx, e)) {
-        shape._emitMouseEvent(e);
-        break;
+        shape._emitMouseEvent(e)
+        break
       }
     }
-  };
+  }
 }

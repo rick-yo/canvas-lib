@@ -4,8 +4,9 @@ import Shape, {
   applyShapeAttrsToContext,
   MousePosition,
 } from './Shape';
-import containerMixin from './containerMixin';
+import containerMixin from './ShapeContainer';
 import { pxByPixelRatio } from './utils';
+import ShapeContainer from './ShapeContainer';
 
 export interface GroupAttrs extends ShapeAttrs {}
 /**
@@ -17,9 +18,9 @@ export interface GroupAttrs extends ShapeAttrs {}
  * @class Group
  * @extends {Shape<GroupAttrs>}
  */
-export default class Group extends containerMixin(Shape) {
+export default class Group extends Shape {
   type = 'group';
-  shapes: Shape[] = [];
+  shapeContainer: ShapeContainer = new ShapeContainer()
   constructor(attrs: GroupAttrs) {
     super(attrs);
   }
@@ -30,7 +31,7 @@ export default class Group extends containerMixin(Shape) {
    * @memberof Group
    */
   add(shape: Shape) {
-    super.add(shape);
+    this.shapeContainer.add(shape);
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
   /**
@@ -40,7 +41,7 @@ export default class Group extends containerMixin(Shape) {
    * @memberof Group
    */
   remove(shape: Shape) {
-    super.remove(shape);
+    this.shapeContainer.remove(shape);
     shape.canvas = null;
     shape.group = null
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
@@ -53,14 +54,14 @@ export default class Group extends containerMixin(Shape) {
    * @memberof Group
    */
   render(ctx: CanvasRenderingContext2D) {
-    const { x, y, ...rest } = this.attrs;
-    this.shapes.forEach(shape => {
+    const { x, y, ...rest } = this.attrs();
+    this.shapeContainer.getShapes().forEach(shape => {
       ctx.save();
       // rerender canvas
       shape.group = this;
       shape.canvas = this.canvas;
       // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeAttrsToContext(ctx, rest, shape.attrs);
+      applyShapeAttrsToContext(ctx, rest, shape.attrs());
       shape.render(ctx);
       ctx.restore();
     });
@@ -74,9 +75,10 @@ export default class Group extends containerMixin(Shape) {
    * @memberof Group
    */
   isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent) {
-    const len = this.shapes.length;
+    const shapes = this.shapeContainer.getShapes()
+    const len = shapes.length
     for (let index = len - 1; index >= 0; index--) {
-      const shape = this.shapes[index];
+      const shape = shapes[index];
       if (shape.isPointInShape(ctx, e)) {
         shape._emitMouseEvent(e)
         break;

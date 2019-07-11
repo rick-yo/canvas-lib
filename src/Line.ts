@@ -19,8 +19,8 @@ export default class Line extends Shape<LineAttrs> {
     // renew path so that rerender won't get old path object
     const [x, y] = this._getShapePosition();
     const [x1, y1] = this._getShapePosition([
-      this.get('x1'),
-      this.get('y1'),
+      this.attr('x1'),
+      this.attr('y1'),
     ]);
     this.path = new Path2D();
     this.path.moveTo(x, y);

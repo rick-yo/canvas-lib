@@ -34,7 +34,7 @@ export type MousePosition = Mutable<
 > & {
   target?: Shape<any>;
 };
-
+type Position =  [number, number];
 export const canvasStylesMap: Dictionary<boolean> = {
   fillStyle: true,
   strokeStyle: true,
@@ -85,12 +85,12 @@ const INT_ATTR_KEYS: ShapeAttrsKeys[] = [
 export default class Shape<
   P extends ShapeAttrs = ShapeAttrs
 > extends EventEmitter {
-  type = 'shape';
-  attrs: P;
+  public type = 'shape';
+  private _attrs: P;
   canvas: Canvas | null = null;
   group: Group | null = null;
   data: any;
-  path: Path2D | null = null;
+  protected path: Path2D | null = null;
   /**
    * Creates an instance of Shape with attrs.
    * @param {P} attrs
@@ -98,8 +98,10 @@ export default class Shape<
    */
   constructor(attrs: P) {
     super();
-    this.attrs = attrs;
+    this._attrs = attrs;
   }
+  attr<K extends keyof P>(key: K): P[K]
+  attr<K extends keyof P>(key: K, value: P[K]): void
   /**
    * Set shape's attrs and shape will rerender automatically.
    *
@@ -107,12 +109,23 @@ export default class Shape<
    * @param {K} key
    * @param {P[K]} value
    */
-  set = <K extends keyof P>(key: K, value: P[K]) => {
+  attr<K extends keyof P>(key: K, value?: P[K]) {
+    if(!value) return this._attrs[key]
     this._setAttr(key, value);
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   };
+  attrs() {
+    return this._attrs;
+  };
+  /**
+   * only used in local shape, will not trigger a rerender
+   *
+   * @template K
+   * @param {K} key
+   * @param {P[K]} value
+   */
   protected _setAttr = <K extends keyof P>(key: K, value: P[K]) => {
-    this.attrs[key] = value;
+    this._attrs[key] = value;
   };
   /**
    * get shape's real attr, affected by group and scale
@@ -124,19 +137,9 @@ export default class Shape<
     // @ts-ignore
     if (INT_ATTR_KEYS.indexOf(key) > -1) {
       // @ts-ignore
-      return pxByPixelRatio(this.attrs[key]);
+      return pxByPixelRatio(this._attrs[key]);
     }
-    return this.attrs[key];
-  };
-  /**
-   * Get a attr
-   *
-   * @template K
-   * @param {K} key
-   * @returns
-   */
-  get = <K extends keyof P>(key: K) => {
-    return this.attrs[key];
+    return this._attrs[key];
   };
   /**
    * Store data in shape, you can get it in `on` callback later.
@@ -165,7 +168,7 @@ export default class Shape<
    * @memberof Shape
    */
   protected fillOrStroke(ctx: CanvasRenderingContext2D, path?: Path2D) {
-    const { strokeStyle, fillStyle } = this.attrs;
+    const { strokeStyle, fillStyle } = this._attrs;
     if (strokeStyle) {
       path ? ctx.stroke(path) : ctx.stroke();
     }
@@ -184,18 +187,30 @@ export default class Shape<
    * get shape's real postion, sum up shape.group, used in shape.render and mouse event detection
    *
    * @protected
-   * @param {[number, number]} [pos]
-   * @returns {[number, number]}
+   * @param {Position} [pos]
+   * @returns {Position}
    * @memberof Shape
    */
-  protected _getShapePosition(pos?: [number, number]): [number, number] {
+  protected _getShapePosition(pos?: Position): Position{
     // 特殊处理，group内shape实际坐标 = group.x + shape.x，所以要将坐标轴移动
-    pos = pos || [this.get('x'), this.get('y')];
-    if (this.group) {
-      pos[0] += this.group.get('x');
-      pos[1] += this.group.get('y');
-    }
+    pos = pos || [this.attr('x'), this.attr('y')];
+    const groups = this._getShapeGroups()
+    groups.forEach(group => {
+      // @ts-ignore
+      pos[0] += group.attr('x');
+      // @ts-ignore
+      pos[1] += group.attr('y');
+    })
     return pos;
+  }
+  protected _getShapeGroups() {
+    let groups = []
+    let current = this.group
+    while(current) {
+      groups.push(current)
+      current = current.group
+    }
+    return groups
   }
   public _emitMouseEvent(e: MouseEvent) {
     const position = this._getMousePosition(e);
@@ -238,8 +253,8 @@ export default class Shape<
    * @memberof Shape
    */
   protected _isPointInShapeContent(e: MouseEvent) {
-    const width = this.get('width');
-    const height = this.get('height');
+    const width = this.attr('width');
+    const height = this.attr('height');
     if (!width || !height) return false;
     const [x, y] = this._getShapePosition();
     const { offsetX, offsetY } = e;

@@ -23,7 +23,7 @@ export default class Image extends Shape<ImageAttrs> {
     super(attrs);
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { width, height, image } = this.attrs;
+    const { width, height, image } = this.attrs();
     const [x, y] = this._getShapePosition();
     ctx.drawImage(image, x, y, width, height);
   }

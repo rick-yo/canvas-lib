@@ -1,5 +1,4 @@
 import Shape, { ShapeAttrs, MousePosition } from './Shape';
-import inRange from 'lodash/inRange';
 
 export interface TextAttrs extends ShapeAttrs {
   text: string;
@@ -19,46 +18,46 @@ export default class Text extends Shape<TextAttrs> {
     super(attrs);
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { text, font } = this.attrs;
+    const { text } = this.attrs();
     const [x, y] = this._getShapePosition();
-    let { width, maxWidth, height } = this.attrs;
-    if (font) {
-      ctx.font = font;
-    }
+    let { width, maxWidth, height } = this.attrs();
     // 手动计算高度
-    const _font = font || ctx.font;
-    height = height || parseInt(_font, 10);
-    width = ctx.measureText(text).width;
-    this._setAttr('width', width)
+    const { font } = ctx 
+    const fontHeight = parseInt(font, 10)
+    height = height || Number.isNaN(fontHeight) ? 20 : fontHeight;
     this._setAttr('height', height)
-    // 直接fill
+    width =  width || ctx.measureText(text).width;
+    this._setAttr('width', width)
+    // fill
     if (!maxWidth) {
-      ctx.fillText(text, x, y);
+      this.fillOrStrokeText(ctx, text);
       return;
     }
     if (width <= maxWidth) {
-      ctx.fillText(text, x, y);
+      this.fillOrStrokeText(ctx, text);
       return;
     }
+    // when maxWidth specified
+    this._setAttr('width', maxWidth)
     const ellipsis = '...';
     const ellipsisWidth = ctx.measureText(ellipsis).width + 10;
     const _maxWidth = maxWidth - ellipsisWidth;
     let currentWidth = width;
     let currentText = text;
     while (currentText && currentWidth > _maxWidth) {
-      currentText = currentText.slice(0, currentText.length - 2);
+      currentText = currentText.slice(0, currentText.length - 1);
       currentWidth = ctx.measureText(currentText).width;
     }
-    this._setAttr('width', width)
-    ctx.fillText(`${currentText}${ellipsis}`, x, y);
+    this.fillOrStrokeText(ctx, `${currentText}${ellipsis}`);
   }
   private fillOrStrokeText(ctx: CanvasRenderingContext2D, acturalText: string) {
-    const { x, y, text, fillStyle, strokeStyle } = this.attrs;
+    const { x, y, fillStyle, strokeStyle } = this.attrs();
     if (fillStyle) {
       ctx.fillText(acturalText, x, y);
-    }
-    if (strokeStyle) {
+    } else if (strokeStyle) {
       ctx.strokeText(acturalText, x, y);
+    } else {
+      ctx.fillText(acturalText, x, y);
     }
   }
   isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent): boolean {

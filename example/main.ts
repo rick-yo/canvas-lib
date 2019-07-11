@@ -83,10 +83,10 @@ async function main() {
   });
   const text = new Text({
     text: '测试测试测试测试',
-    // maxWidth: 100,
-    x: 20,
-    y: 50,
-    font: '48px serif',
+    maxWidth: 100,
+    x: 0,
+    y: 20,
+    font: '18px serif',
   });
   text.on('click', (e) => {
     console.log(e);
@@ -100,7 +100,7 @@ async function main() {
     console.log(e);
   });
   rect1.on('click', (e) => {
-    rect1.set('fillStyle', 'blue');
+    rect1.attr('fillStyle', 'blue');
     console.log(e);
   });
   arc.on('click', (e) => {

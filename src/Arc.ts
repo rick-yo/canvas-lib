@@ -25,7 +25,7 @@ export default class Arc extends Shape<ArcAttrs> {
       endAngle = PI2,
       anticlockwise = false,
       radius,
-    } = this.attrs;
+    } = this.attrs();
     const [x, y] = this._getShapePosition();
     this.path = new Path2D();
     this.path.arc(x, y, radius, startAngle, endAngle, anticlockwise);

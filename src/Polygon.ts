@@ -18,7 +18,7 @@ export default class Polygon extends Shape<PolygonAttrs> {
     super(attrs);
   }
   private makePolygonPath = () => {
-    const { sides } = this.attrs;
+    const { sides } = this.attrs();
     this.path = new Path2D();
     for (let index = 0; index < sides; index++) {
       const angle = ((Math.PI * 2) / sides) * index;
@@ -28,14 +28,14 @@ export default class Polygon extends Shape<PolygonAttrs> {
     this.path.closePath();
   };
   private _getPolygonPoint = (angle: number): [number, number] => {
-    const { radius, sides } = this.attrs;
+    const { radius, sides } = this.attrs();
     const [x, y] = this._getShapePosition();
     const px = Math.sin(angle) * radius + x;
     const py = y - Math.cos(angle) * radius;
     return [px, py];
   };
   render(ctx: CanvasRenderingContext2D) {
-    const { strokeStyle, fillStyle } = this.attrs;
+    const { strokeStyle, fillStyle } = this.attrs();
     this.makePolygonPath();
     if (!this.path) return;
     if (strokeStyle) {
