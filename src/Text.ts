@@ -19,7 +19,6 @@ export default class Text extends Shape<TextAttrs> {
   }
   render(ctx: CanvasRenderingContext2D) {
     const { text } = this.attrs();
-    const [x, y] = this._getShapePosition();
     let { width, maxWidth, height } = this.attrs();
     // 手动计算高度
     const { font } = ctx 
@@ -29,11 +28,7 @@ export default class Text extends Shape<TextAttrs> {
     width =  width || ctx.measureText(text).width;
     this._setAttr('width', width)
     // fill
-    if (!maxWidth) {
-      this.fillOrStrokeText(ctx, text);
-      return;
-    }
-    if (width <= maxWidth) {
+    if (!maxWidth || width <= maxWidth) {
       this.fillOrStrokeText(ctx, text);
       return;
     }
@@ -51,7 +46,8 @@ export default class Text extends Shape<TextAttrs> {
     this.fillOrStrokeText(ctx, `${currentText}${ellipsis}`);
   }
   private fillOrStrokeText(ctx: CanvasRenderingContext2D, acturalText: string) {
-    const { x, y, fillStyle, strokeStyle } = this.attrs();
+    const { fillStyle, strokeStyle } = this.attrs();
+    const [x, y] = this._getShapePosition();
     if (fillStyle) {
       ctx.fillText(acturalText, x, y);
     } else if (strokeStyle) {
