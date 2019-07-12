@@ -90,6 +90,50 @@ export default class Canvas extends EventEmitter {
     this._render()
   }
   /**
+   * set Canvas rotate, and Canvas will rerender automatically
+   *
+   * @param {...Parameters<CanvasTransform['rotate']>} angle
+   * @memberof Canvas
+   */
+  rotate(...angle: Parameters<CanvasTransform['rotate']>) {
+    this.ctx.save()
+    this.ctx.rotate(...angle)
+    this._render()
+    this.ctx.restore()
+  }
+  /**
+   * set Canvas scale, and Canvas will rerender automatically
+   *
+   * @param {...Parameters<CanvasTransform['scale']>} args
+   * @memberof Canvas
+   */
+  scale(...args: Parameters<CanvasTransform['scale']>) {
+    const [a, d] = args
+    this.setTransform(a, 0, 0, d, 0, 0)
+  }
+  /**
+   * set Canvas translate, and Canvas will rerender automatically
+   *
+   * @param {...Parameters<CanvasTransform['translate']>} args
+   * @memberof Canvas
+   */
+  translate(...args: Parameters<CanvasTransform['translate']>) {
+    this.setTransform(1, 0, 0, 1, ...args)
+  }
+  /**
+   * set Canvas transform, and Canvas will rerender automatically
+   *
+   * @param {...Parameters<CanvasTransform['transform']>} args
+   * @memberof Canvas
+   */
+  setTransform(...args: Parameters<CanvasTransform['transform']>) {
+    // use `transform` to multiply current matrix to avoid reset canvas pixelRatio
+    this.ctx.save()
+    this.ctx.transform(...args)
+    this._render()
+    this.ctx.restore()
+  }
+  /**
    * Remove all shapes from Canvas
    *
    * @memberof Canvas
@@ -97,7 +141,19 @@ export default class Canvas extends EventEmitter {
   clear() {
     this.shapeContainer.getShapes().forEach(shape => (shape.canvas = null))
     this.shapeContainer.removeAll()
-    this.clearCanvas()
+    this._clearCanvas()
+  }
+  
+  /**
+   * Remove all shapes and clear all events on canvas
+   *
+   * @memberof Canvas
+   */
+  destroy() {
+    this.clear()
+    this._unhandleMouseEvents()
+    this._unhandleCanvasRerenderEvent()
+    this._unsetCanvasPixelRatio()
   }
   /**
    * Clear Canvas
@@ -105,12 +161,15 @@ export default class Canvas extends EventEmitter {
    * @returns
    * @memberof Canvas
    */
-  clearCanvas() {
+  private _clearCanvas() {
+    this.ctx.save()
     const canvas = this.canvasElement
+    this.ctx.resetTransform()
     this.ctx.clearRect(0, 0, canvas.width, canvas.height)
+    this.ctx.restore()
   }
   private _render = () => {
-    this.clearCanvas()
+    this._clearCanvas()
     this.shapeContainer.getShapes().forEach(shape => {
       this._renderShape(shape)
     })
@@ -120,7 +179,7 @@ export default class Canvas extends EventEmitter {
    *
    * @param {Shape} shape
    */
-  _renderShape = (shape: Shape) => {
+  private _renderShape = (shape: Shape) => {
     this.ctx.save()
     shape.canvas = this
     applyShapeAttrsToContext(this.ctx, shape.attrs())
@@ -134,12 +193,28 @@ export default class Canvas extends EventEmitter {
     this.canvasElement.height = pxByPixelRatio(this.height)
     this.ctx.scale(pixelRatio, pixelRatio)
   }
+  private _unsetCanvasPixelRatio = () => {
+    this.canvasElement.width = this.width
+    this.canvasElement.height = this.height
+    this.ctx.scale(1, 1)
+  }
   private _handleCanvasRerenderEvent = () => {
     this.on(CANVAS_RERENDER_EVENT_TYPE, this._render)
+  }
+  private _unhandleCanvasRerenderEvent = () => {
+    this.off(CANVAS_RERENDER_EVENT_TYPE, this._render)
   }
   private _handleMouseEvents() {
     MOUSE_EVENTS.forEach(key => {
       this.canvasElement.addEventListener<MouseEventType>(
+        key,
+        this._emitShapeEvents,
+      )
+    })
+  }
+  private _unhandleMouseEvents() {
+    MOUSE_EVENTS.forEach(key => {
+      this.canvasElement.removeEventListener<MouseEventType>(
         key,
         this._emitShapeEvents,
       )
