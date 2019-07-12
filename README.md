@@ -4,9 +4,11 @@ Canvas library with a delightful API.
 # Feature
 * support all kinds of shapes, draw with no side-effect
 * group shapes support
-* event system, drag & drop
+* mouse event system 
 * transform, scale and translate canvas coordinate
+* drag & drop shape
 * support basic animation
+* physical effects
 
 # API
 
