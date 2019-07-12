@@ -909,7 +909,7 @@ img { max-width: 100%; }
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="arc.html" class="tsd-kind-icon">Arc</a>
 		</li>
 		<li class="current tsd-kind-class">
@@ -928,7 +928,16 @@ img { max-width: 100%; }
 					<a href="canvas.html#events" class="tsd-kind-icon">events</a>
 				</li>
 				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="canvas.html#shapes" class="tsd-kind-icon">shapes</a>
+					<a href="canvas.html#height" class="tsd-kind-icon">height</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="canvas.html#pixelratio" class="tsd-kind-icon">pixel<wbr>Ratio</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="canvas.html#shapecontainer" class="tsd-kind-icon">shape<wbr>Container</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="canvas.html#width" class="tsd-kind-icon">width</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="canvas.html#add" class="tsd-kind-icon">add</a>
@@ -937,7 +946,7 @@ img { max-width: 100%; }
 					<a href="canvas.html#clear" class="tsd-kind-icon">clear</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class">
-					<a href="canvas.html#clearcanvas" class="tsd-kind-icon">clear<wbr>Canvas</a>
+					<a href="canvas.html#destroy" class="tsd-kind-icon">destroy</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a href="canvas.html#emit" class="tsd-kind-icon">emit</a>
@@ -951,6 +960,18 @@ img { max-width: 100%; }
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="canvas.html#remove" class="tsd-kind-icon">remove</a>
 				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="canvas.html#rotate" class="tsd-kind-icon">rotate</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="canvas.html#scale" class="tsd-kind-icon">scale</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="canvas.html#settransform" class="tsd-kind-icon">set<wbr>Transform</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="canvas.html#translate" class="tsd-kind-icon">translate</a>
+				</li>
 			</ul>
 		</li>
 		<li class=" tsd-kind-class">
@@ -959,22 +980,22 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-class tsd-has-type-parameter">
 			<a href="group.html" class="tsd-kind-icon">Group</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="image.html" class="tsd-kind-icon">Image</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="line.html" class="tsd-kind-icon">Line</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="polygon.html" class="tsd-kind-icon">Polygon</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="rect.html" class="tsd-kind-icon">Rect</a>
 		</li>
 		<li class=" tsd-kind-class tsd-has-type-parameter">
 			<a href="shape.html" class="tsd-kind-icon">Shape</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="text.html" class="tsd-kind-icon">Text</a>
 		</li>
 		<li class=" tsd-kind-interface">
@@ -1007,6 +1028,9 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#canvasstyleskeys" class="tsd-kind-icon">Canvas<wbr>Styles<wbr>Keys</a>
 		</li>
+		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+			<a href="../globals.html#class" class="tsd-kind-icon">Class</a>
+		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#mouseposition" class="tsd-kind-icon">Mouse<wbr>Position</a>
 		</li>
@@ -1023,7 +1047,10 @@ img { max-width: 100%; }
 			<a href="../globals.html#applyshapeattrstocontext" class="tsd-kind-icon">apply<wbr>Shape<wbr>Attrs<wbr>ToContext</a>
 		</li>
 		<li class=" tsd-kind-function">
-			<a href="../globals.html#pxbyratio" class="tsd-kind-icon">px<wbr>ByRatio</a>
+			<a href="../globals.html#pxbypixelratio" class="tsd-kind-icon">px<wbr>ByPixel<wbr>Ratio</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="../globals.html#raiseerror" class="tsd-kind-icon">raise<wbr>Error</a>
 		</li>
 		<li class=" tsd-kind-object-literal">
 			<a href="../globals.html#canvasstylesmap" class="tsd-kind-icon">canvas<wbr>Styles<wbr>Map</a>
@@ -1076,7 +1103,10 @@ img { max-width: 100%; }
 							<li class="tsd-kind-property tsd-parent-kind-class"><a href="canvas.html#canvaselement" class="tsd-kind-icon">canvas<wbr>Element</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class"><a href="canvas.html#ctx" class="tsd-kind-icon">ctx</a></li>
 							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="canvas.html#events" class="tsd-kind-icon">events</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="canvas.html#shapes" class="tsd-kind-icon">shapes</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="canvas.html#height" class="tsd-kind-icon">height</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="canvas.html#pixelratio" class="tsd-kind-icon">pixel<wbr>Ratio</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="canvas.html#shapecontainer" class="tsd-kind-icon">shape<wbr>Container</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="canvas.html#width" class="tsd-kind-icon">width</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
@@ -1084,11 +1114,15 @@ img { max-width: 100%; }
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#add" class="tsd-kind-icon">add</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#clear" class="tsd-kind-icon">clear</a></li>
-							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#clearcanvas" class="tsd-kind-icon">clear<wbr>Canvas</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#destroy" class="tsd-kind-icon">destroy</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="canvas.html#emit" class="tsd-kind-icon">emit</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="canvas.html#off" class="tsd-kind-icon">off</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="canvas.html#on" class="tsd-kind-icon">on</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#remove" class="tsd-kind-icon">remove</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#rotate" class="tsd-kind-icon">rotate</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#scale" class="tsd-kind-icon">scale</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#settransform" class="tsd-kind-icon">set<wbr>Transform</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="canvas.html#translate" class="tsd-kind-icon">translate</a></li>
 						</ul>
 					</section>
 				</div>
@@ -1100,20 +1134,25 @@ img { max-width: 100%; }
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Canvas<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanvasRenderingContext2D</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="canvas.html" class="tsd-signature-type">Canvas</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Canvas<span class="tsd-signature-symbol">(</span>canvas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLCanvasElement</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="canvas.html" class="tsd-signature-type">Canvas</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<p>Overrides <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#constructor">constructor</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L44">Canvas.ts:44</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L47">Canvas.ts:47</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+								<h5>canvas: <span class="tsd-signature-type">HTMLCanvasElement</span></h5>
+							</li>
+							<li>
+								<h5>options: <span class="tsd-signature-type">object</span></h5>
+								<ul class="tsd-parameters">
+								</ul>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <a href="canvas.html" class="tsd-signature-type">Canvas</a></h4>
@@ -1129,7 +1168,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">canvas<wbr>Element<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L44">Canvas.ts:44</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L43">Canvas.ts:43</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1139,7 +1178,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">ctx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CanvasRenderingContext2D</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L42">Canvas.ts:42</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L42">Canvas.ts:42</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1150,7 +1189,7 @@ img { max-width: 100%; }
 				<aside class="tsd-sources">
 					<p>Inherited from <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#events">events</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/EventEmitter.ts#L10">EventEmitter.ts:10</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/EventEmitter.ts#L10">EventEmitter.ts:10</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1173,12 +1212,42 @@ img { max-width: 100%; }
 				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="shapes" class="tsd-anchor"></a>
-				<h3>shapes</h3>
-				<div class="tsd-signature tsd-kind-icon">shapes<span class="tsd-signature-symbol">:</span> <a href="shape.html" class="tsd-signature-type">Shape</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+				<a name="height" class="tsd-anchor"></a>
+				<h3>height</h3>
+				<div class="tsd-signature tsd-kind-icon">height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;150</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L43">Canvas.ts:43</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L45">Canvas.ts:45</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="pixelratio" class="tsd-anchor"></a>
+				<h3>pixel<wbr>Ratio</h3>
+				<div class="tsd-signature tsd-kind-icon">pixel<wbr>Ratio<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;pixelRatio</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L46">Canvas.ts:46</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="shapecontainer" class="tsd-anchor"></a>
+				<h3>shape<wbr>Container</h3>
+				<div class="tsd-signature tsd-kind-icon">shape<wbr>Container<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ShapeContainer</span><span class="tsd-signature-symbol"> =&nbsp;new ShapeContainer()</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L47">Canvas.ts:47</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="width" class="tsd-anchor"></a>
+				<h3>width</h3>
+				<div class="tsd-signature tsd-kind-icon">width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;300</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L44">Canvas.ts:44</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1195,7 +1264,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L60">Canvas.ts:60</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L77">Canvas.ts:77</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1228,7 +1297,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L86">Canvas.ts:86</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L141">Canvas.ts:141</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1246,21 +1315,21 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-				<a name="clearcanvas" class="tsd-anchor"></a>
-				<h3>clear<wbr>Canvas</h3>
+				<a name="destroy" class="tsd-anchor"></a>
+				<h3>destroy</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">clear<wbr>Canvas<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					<li class="tsd-signature tsd-kind-icon">destroy<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L96">Canvas.ts:96</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L152">Canvas.ts:152</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Clear Canvas</p>
+								<p>Remove all shapes and clear all events on canvas</p>
 							</div>
 							<dl class="tsd-comment-tags">
 								<dt>memberof</dt>
@@ -1283,7 +1352,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#emit">emit</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/EventEmitter.ts#L46">EventEmitter.ts:46</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/EventEmitter.ts#L46">EventEmitter.ts:46</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1320,7 +1389,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#off">off</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/EventEmitter.ts#L32">EventEmitter.ts:32</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/EventEmitter.ts#L32">EventEmitter.ts:32</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1357,7 +1426,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Inherited from <a href="eventemitter.html">EventEmitter</a>.<a href="eventemitter.html#on">on</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/EventEmitter.ts#L21">EventEmitter.ts:21</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/EventEmitter.ts#L21">EventEmitter.ts:21</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1393,7 +1462,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L74">Canvas.ts:74</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L87">Canvas.ts:87</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1410,6 +1479,138 @@ img { max-width: 100%; }
 						<ul class="tsd-parameters">
 							<li>
 								<h5>shape: <a href="shape.html" class="tsd-signature-type">Shape</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="rotate" class="tsd-anchor"></a>
+				<h3>rotate</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">rotate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>angle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">rotate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L98">Canvas.ts:98</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>set Canvas rotate, and Canvas will rerender automatically</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>memberof</dt>
+								<dd><p>Canvas</p>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>angle: <span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">rotate</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="scale" class="tsd-anchor"></a>
+				<h3>scale</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">scale<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">scale</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L110">Canvas.ts:110</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>set Canvas scale, and Canvas will rerender automatically</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>memberof</dt>
+								<dd><p>Canvas</p>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">scale</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="settransform" class="tsd-anchor"></a>
+				<h3>set<wbr>Transform</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">set<wbr>Transform<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">transform</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L129">Canvas.ts:129</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>set Canvas transform, and Canvas will rerender automatically</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>memberof</dt>
+								<dd><p>Canvas</p>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">transform</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="translate" class="tsd-anchor"></a>
+				<h3>translate</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">translate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">translate</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L120">Canvas.ts:120</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>set Canvas translate, and Canvas will rerender automatically</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>memberof</dt>
+								<dd><p>Canvas</p>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">translate</span><span class="tsd-signature-symbol">&gt;</span></h5>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>

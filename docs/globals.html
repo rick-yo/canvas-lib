@@ -909,7 +909,7 @@ img { max-width: 100%; }
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="classes/arc.html" class="tsd-kind-icon">Arc</a>
 		</li>
 		<li class=" tsd-kind-class">
@@ -921,22 +921,22 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-class tsd-has-type-parameter">
 			<a href="classes/group.html" class="tsd-kind-icon">Group</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="classes/image.html" class="tsd-kind-icon">Image</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="classes/line.html" class="tsd-kind-icon">Line</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="classes/polygon.html" class="tsd-kind-icon">Polygon</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="classes/rect.html" class="tsd-kind-icon">Rect</a>
 		</li>
 		<li class=" tsd-kind-class tsd-has-type-parameter">
 			<a href="classes/shape.html" class="tsd-kind-icon">Shape</a>
 		</li>
-		<li class=" tsd-kind-class tsd-has-type-parameter">
+		<li class=" tsd-kind-class">
 			<a href="classes/text.html" class="tsd-kind-icon">Text</a>
 		</li>
 		<li class=" tsd-kind-interface">
@@ -969,6 +969,9 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#canvasstyleskeys" class="tsd-kind-icon">Canvas<wbr>Styles<wbr>Keys</a>
 		</li>
+		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+			<a href="globals.html#class" class="tsd-kind-icon">Class</a>
+		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#mouseposition" class="tsd-kind-icon">Mouse<wbr>Position</a>
 		</li>
@@ -985,7 +988,10 @@ img { max-width: 100%; }
 			<a href="globals.html#applyshapeattrstocontext" class="tsd-kind-icon">apply<wbr>Shape<wbr>Attrs<wbr>ToContext</a>
 		</li>
 		<li class=" tsd-kind-function">
-			<a href="globals.html#pxbyratio" class="tsd-kind-icon">px<wbr>ByRatio</a>
+			<a href="globals.html#pxbypixelratio" class="tsd-kind-icon">px<wbr>ByPixel<wbr>Ratio</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="globals.html#raiseerror" class="tsd-kind-icon">raise<wbr>Error</a>
 		</li>
 		<li class=" tsd-kind-object-literal">
 			<a href="globals.html#canvasstylesmap" class="tsd-kind-icon">canvas<wbr>Styles<wbr>Map</a>
@@ -996,16 +1002,19 @@ img { max-width: 100%; }
 	<div class="content-wrap">
 		<div class="tsd-panel tsd-typography">
 			<h1 id="canvas-lib">canvas-lib</h1>
-			<p>canvas library with a delightful API.</p>
+			<p>Canvas library with a delightful API.</p>
 			<h1 id="feature">Feature</h1>
 			<ul>
 				<li>support all kinds of shapes, draw with no side-effect</li>
 				<li>group shapes support</li>
-				<li>event system, drag &amp; drop</li>
+				<li>mouse event system </li>
 				<li>transform, scale and translate canvas coordinate</li>
+				<li>drag &amp; drop shape</li>
 				<li>support basic animation</li>
+				<li>physical effects</li>
 			</ul>
 			<h1 id="api">API</h1>
+			<p><a href="https://luv-sic.github.io/canvas-lib/">See here</a></p>
 			<h1 id="example">example</h1>
 			<pre><code class="language-JavaScript"><span class="hljs-keyword">const</span> canvas = <span class="hljs-keyword">new</span> Canvas(<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'canvas'</span>));
 
@@ -1036,16 +1045,16 @@ canvas.add(rect);</code></pre>
 					<section class="tsd-index-section ">
 						<h3>Classes</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/arc.html" class="tsd-kind-icon">Arc</a></li>
+							<li class="tsd-kind-class"><a href="classes/arc.html" class="tsd-kind-icon">Arc</a></li>
 							<li class="tsd-kind-class"><a href="classes/canvas.html" class="tsd-kind-icon">Canvas</a></li>
 							<li class="tsd-kind-class"><a href="classes/eventemitter.html" class="tsd-kind-icon">Event<wbr>Emitter</a></li>
 							<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/group.html" class="tsd-kind-icon">Group</a></li>
-							<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/image.html" class="tsd-kind-icon">Image</a></li>
-							<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/line.html" class="tsd-kind-icon">Line</a></li>
-							<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/polygon.html" class="tsd-kind-icon">Polygon</a></li>
-							<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/rect.html" class="tsd-kind-icon">Rect</a></li>
+							<li class="tsd-kind-class"><a href="classes/image.html" class="tsd-kind-icon">Image</a></li>
+							<li class="tsd-kind-class"><a href="classes/line.html" class="tsd-kind-icon">Line</a></li>
+							<li class="tsd-kind-class"><a href="classes/polygon.html" class="tsd-kind-icon">Polygon</a></li>
+							<li class="tsd-kind-class"><a href="classes/rect.html" class="tsd-kind-icon">Rect</a></li>
 							<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/shape.html" class="tsd-kind-icon">Shape</a></li>
-							<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/text.html" class="tsd-kind-icon">Text</a></li>
+							<li class="tsd-kind-class"><a href="classes/text.html" class="tsd-kind-icon">Text</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
@@ -1066,6 +1075,7 @@ canvas.add(rect);</code></pre>
 						<h3>Type aliases</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-type-alias"><a href="globals.html#canvasstyleskeys" class="tsd-kind-icon">Canvas<wbr>Styles<wbr>Keys</a></li>
+							<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#class" class="tsd-kind-icon">Class</a></li>
 							<li class="tsd-kind-type-alias"><a href="globals.html#mouseposition" class="tsd-kind-icon">Mouse<wbr>Position</a></li>
 							<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#mutable" class="tsd-kind-icon">Mutable</a></li>
 						</ul>
@@ -1081,7 +1091,8 @@ canvas.add(rect);</code></pre>
 						<h3>Functions</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function"><a href="globals.html#applyshapeattrstocontext" class="tsd-kind-icon">apply<wbr>Shape<wbr>Attrs<wbr>ToContext</a></li>
-							<li class="tsd-kind-function"><a href="globals.html#pxbyratio" class="tsd-kind-icon">px<wbr>ByRatio</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#pxbypixelratio" class="tsd-kind-icon">px<wbr>ByPixel<wbr>Ratio</a></li>
+							<li class="tsd-kind-function"><a href="globals.html#raiseerror" class="tsd-kind-icon">raise<wbr>Error</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
@@ -1101,17 +1112,32 @@ canvas.add(rect);</code></pre>
 				<div class="tsd-signature tsd-kind-icon">Canvas<wbr>Styles<wbr>Keys<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">keyof CanvasStyles</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L30">Shape.ts:30</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L30">Shape.ts:30</a></li>
 					</ul>
 				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
+				<a name="class" class="tsd-anchor"></a>
+				<h3>Class</h3>
+				<div class="tsd-signature tsd-kind-icon">Class<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/utils.ts#L17">utils.ts:17</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+					</ul>
+				</div>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-type-alias">
 				<a name="mouseposition" class="tsd-anchor"></a>
 				<h3>Mouse<wbr>Position</h3>
-				<div class="tsd-signature tsd-kind-icon">Mouse<wbr>Position<span class="tsd-signature-symbol">:</span> <a href="globals.html#mutable" class="tsd-signature-type">Mutable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"offsetX"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"offsetY"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+				<div class="tsd-signature tsd-kind-icon">Mouse<wbr>Position<span class="tsd-signature-symbol">:</span> <a href="globals.html#mutable" class="tsd-signature-type">Mutable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Pick</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"offsetX"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"offsetY"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"type"</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L32">Shape.ts:32</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L32">Shape.ts:32</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1121,7 +1147,7 @@ canvas.add(rect);</code></pre>
 				<div class="tsd-signature tsd-kind-icon">Mutable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/utils.ts#L7">utils.ts:7</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/utils.ts#L8">utils.ts:8</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -1139,7 +1165,7 @@ canvas.add(rect);</code></pre>
 				<div class="tsd-signature tsd-kind-icon">CANVAS_<wbr>RERENDER_<wbr>EVENT_<wbr>TYPE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"canvas:rerender"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;canvas:rerender&quot;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Canvas.ts#L5">Canvas.ts:5</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Canvas.ts#L7">Canvas.ts:7</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1149,7 +1175,7 @@ canvas.add(rect);</code></pre>
 				<div class="tsd-signature tsd-kind-icon">pixel<wbr>Ratio<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;Math.round(window.devicePixelRatio || 1)</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/utils.ts#L1">utils.ts:1</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/utils.ts#L2">utils.ts:2</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1166,7 +1192,7 @@ canvas.add(rect);</code></pre>
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L175">Shape.ts:175</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L271">Shape.ts:271</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1183,16 +1209,16 @@ canvas.add(rect);</code></pre>
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function">
-				<a name="pxbyratio" class="tsd-anchor"></a>
-				<h3>px<wbr>ByRatio</h3>
+				<a name="pxbypixelratio" class="tsd-anchor"></a>
+				<h3>px<wbr>ByPixel<wbr>Ratio</h3>
 				<ul class="tsd-signatures tsd-kind-function">
-					<li class="tsd-signature tsd-kind-icon">px<wbr>ByRatio<span class="tsd-signature-symbol">(</span>px<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					<li class="tsd-signature tsd-kind-icon">px<wbr>ByPixel<wbr>Ratio<span class="tsd-signature-symbol">(</span>px<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/utils.ts#L3">utils.ts:3</a></li>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/utils.ts#L4">utils.ts:4</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1205,6 +1231,29 @@ canvas.add(rect);</code></pre>
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="raiseerror" class="tsd-anchor"></a>
+				<h3>raise<wbr>Error</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">raise<wbr>Error<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/utils.ts#L13">utils.ts:13</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>message: <span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Object literals</h2>
@@ -1214,7 +1263,7 @@ canvas.add(rect);</code></pre>
 				<div class="tsd-signature tsd-kind-icon">canvas<wbr>Styles<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L36">Shape.ts:36</a></li>
+						<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L38">Shape.ts:38</a></li>
 					</ul>
 				</aside>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -1223,7 +1272,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">direction<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L51">Shape.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L53">Shape.ts:53</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1233,7 +1282,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">fill<wbr>Style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L37">Shape.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L39">Shape.ts:39</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1243,7 +1292,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">filter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L44">Shape.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L46">Shape.ts:46</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1253,7 +1302,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">font<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L52">Shape.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L54">Shape.ts:54</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1263,7 +1312,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">global<wbr>Alpha<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L45">Shape.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L47">Shape.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1273,7 +1322,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">global<wbr>Composite<wbr>Operation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L46">Shape.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L48">Shape.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1283,7 +1332,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">line<wbr>Cap<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L39">Shape.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L41">Shape.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1293,7 +1342,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">line<wbr>Dash<wbr>Offset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L40">Shape.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L42">Shape.ts:42</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1303,7 +1352,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">line<wbr>Join<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L41">Shape.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L43">Shape.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1313,7 +1362,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">line<wbr>Width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L42">Shape.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L44">Shape.ts:44</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1323,7 +1372,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">miter<wbr>Limit<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L43">Shape.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L45">Shape.ts:45</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1333,7 +1382,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">shadow<wbr>Blur<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L47">Shape.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L49">Shape.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1343,7 +1392,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">shadow<wbr>Color<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L48">Shape.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L50">Shape.ts:50</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1353,7 +1402,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">shadow<wbr>OffsetX<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L49">Shape.ts:49</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L51">Shape.ts:51</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1363,7 +1412,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">shadow<wbr>OffsetY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L50">Shape.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L52">Shape.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1373,7 +1422,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">stroke<wbr>Style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L38">Shape.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L40">Shape.ts:40</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1383,7 +1432,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Align<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L53">Shape.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L55">Shape.ts:55</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1393,7 +1442,7 @@ canvas.add(rect);</code></pre>
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Baseline<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/c42b7fb/src/Shape.ts#L54">Shape.ts:54</a></li>
+							<li>Defined in <a href="https://github.com/luv-sic/canvas-lib/blob/283b8c6/src/Shape.ts#L56">Shape.ts:56</a></li>
 						</ul>
 					</aside>
 				</section>
