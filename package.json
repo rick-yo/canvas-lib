@@ -1,6 +1,6 @@
 {
   "name": "canvas-lib",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "canvas library with a delightful API",
   "main": "dist/lib/index.js",
   "typings": "dist/types/index.d.ts",
