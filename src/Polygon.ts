@@ -28,8 +28,7 @@ export default class Polygon extends Shape<PolygonAttrs> {
     this.path.closePath();
   };
   private _getPolygonPoint = (angle: number): [number, number] => {
-    const { radius, sides } = this.attrs();
-    const [x, y] = this._getShapePosition();
+    const { radius, sides, x, y } = this.attrs();
     const px = Math.sin(angle) * radius + x;
     const py = y - Math.cos(angle) * radius;
     return [px, py];
@@ -45,7 +44,9 @@ export default class Polygon extends Shape<PolygonAttrs> {
       ctx.fill(this.path);
     }
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent) {
-    return this._isPointInShapePath(ctx, e);
+  renderHit(ctx: OffscreenCanvasRenderingContext2D) {
+    ctx.fillStyle = this.color
+    if (!this.path) return
+    ctx.fill(this.path)
   }
 }

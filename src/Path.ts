@@ -2,9 +2,7 @@ import Shape, { ShapeAttrs, MousePosition } from './Shape';
 import inRange from 'lodash/inRange';
 
 export interface ImageAttrs extends ShapeAttrs {
-  image: CanvasImageSource;
-  width: number;
-  height: number;
+  path: string;
 }
 /**
  *
@@ -23,12 +21,13 @@ export default class Image extends Shape<ImageAttrs> {
     super(attrs);
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { width, height, image, x, y } = this.attrs();
-    ctx.drawImage(image, x, y, width, height);
+    const { width, height, path } = this.attrs();
+    const path2d = new Path2D(path)
+    ctx.stroke(path2d)
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
-    const { width, height, image, x, y } = this.attrs();
-    ctx.fillStyle = this.color
-    ctx.fillRect(x, y, width, height);
+    ctx.strokeStyle = this.color
+    if (!this.path) return
+    ctx.stroke(this.path)
   }
 }

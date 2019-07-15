@@ -1,12 +1,10 @@
-import { CANVAS_RERENDER_EVENT_TYPE } from './Canvas';
+import { CANVAS_RERENDER_EVENT_TYPE } from './Canvas'
 import Shape, {
   ShapeAttrs,
   applyShapeAttrsToContext,
   MousePosition,
-} from './Shape';
-import containerMixin from './ShapeContainer';
-import { pxByPixelRatio } from './utils';
-import ShapeContainer from './ShapeContainer';
+} from './Shape'
+import { pxByPixelRatio, SHAPE_TYPE } from './utils'
 
 export interface GroupAttrs extends ShapeAttrs {}
 /**
@@ -19,10 +17,10 @@ export interface GroupAttrs extends ShapeAttrs {}
  * @extends {Shape<GroupAttrs>}
  */
 export default class Group extends Shape {
-  type = 'group';
-  shapeContainer: ShapeContainer = new ShapeContainer()
+  type = SHAPE_TYPE.group
+  children: Shape[] = []
   constructor(attrs: GroupAttrs) {
-    super(attrs);
+    super(attrs)
   }
   /**
    * Add a shape to group
@@ -31,8 +29,8 @@ export default class Group extends Shape {
    * @memberof Group
    */
   add(shape: Shape) {
-    this.shapeContainer.add(shape);
-    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
+    this.children.push(shape)
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this)
   }
   /**
    * Remove a shape from group
@@ -41,49 +39,13 @@ export default class Group extends Shape {
    * @memberof Group
    */
   remove(shape: Shape) {
-    this.shapeContainer.remove(shape);
-    shape.canvas = null;
-    shape.group = null
-    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
-  }
-  /**
-   * overwrite shape.render, will render all Group.shapes, it apply group and shape's attr to context
-   * `render` will set shape.group to this group and shape.canvas to this.group.canvas
-   *
-   * @param {CanvasRenderingContext2D} ctx
-   * @memberof Group
-   */
-  render(ctx: CanvasRenderingContext2D) {
-    const { x, y, ...rest } = this.attrs();
-    this.shapeContainer.getShapes().forEach(shape => {
-      ctx.save();
-      // rerender canvas
-      shape.group = this;
-      shape.canvas = this.canvas;
-      // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeAttrsToContext(ctx, rest, shape.attrs());
-      shape.render(ctx);
-      ctx.restore();
-    });
-  }
-  /**
-   * special case, will dispatch original mouse event to Group.shapes
-   *
-   * @param {CanvasRenderingContext2D} ctx
-   * @param {MouseEvent} e
-   * @returns
-   * @memberof Group
-   */
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent) {
-    const shapes = this.shapeContainer.getShapes()
-    const len = shapes.length
-    for (let index = len - 1; index >= 0; index--) {
-      const shape = shapes[index];
-      if (shape.isPointInShape(ctx, e)) {
-        shape._emitMouseEvent(e)
-        break;
-      }
+    const index = this.children.indexOf(shape)
+    if (index > -1) {
+      this.children[index].group = null
+      this.children.splice(index, 1)
     }
-    return false;
+    shape.canvas = null
+    shape.group = null
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this)
   }
 }

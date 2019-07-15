@@ -18,8 +18,7 @@ export default class Rect extends Shape<RectAttrs> {
     super(attrs);
   }
   private makeRectPath(ctx: CanvasRenderingContext2D) {
-    const { width, height, radius = [] } = this.attrs();
-    const [x, y] = this._getShapePosition();
+    const { width, height, radius = [], x, y } = this.attrs();
     const [leftTop = 0, rightTop = 0, rightBottom = 0, leftBottom = 0] = radius;
     this.path = new Path2D();
     // 左上角
@@ -83,7 +82,9 @@ export default class Rect extends Shape<RectAttrs> {
     if (!this.path) return;
     this.fillOrStroke(ctx, this.path);
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent) {
-    return this._isPointInShapePath(ctx, e)
+  renderHit(ctx: OffscreenCanvasRenderingContext2D) {
+    ctx.fillStyle = this.color
+    if (!this.path) return
+    ctx.fill(this.path)
   }
 }

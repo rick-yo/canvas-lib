@@ -1,5 +1,8 @@
 const prefix = '[canvas-lib]: ';
 export const pixelRatio = Math.round(window.devicePixelRatio || 1);
+export enum SHAPE_TYPE {
+  group = 'group'
+}
 
 export function pxByPixelRatio(px: number) {
   return Math.round(pixelRatio * px);
@@ -15,3 +18,7 @@ export function raiseError(message: string) {
 }
 
 export type Class<T = unknown> = new(...arguments_: any[]) => T;
+
+export function random(min: number, max: number) {
+  return min + Math.random() * (max - min + 1);
+}

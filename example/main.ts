@@ -76,8 +76,8 @@ async function main() {
     strokeStyle: '#000',
   })
   const group = new Group({
-    x: 0,
-    y: 0,
+    x: 500,
+    y: 110,
   })
   const text = new Text({
     text: '测试测试测试测试',
@@ -89,11 +89,10 @@ async function main() {
   text.on('click', e => {
     console.log(e)
   })
-  can.add(text)
   polygon.on('click', e => {
     console.log(e)
   })
-
+  
   rect.on('click', e => {
     console.log(e)
   })
@@ -104,6 +103,7 @@ async function main() {
   arc.on('click', e => {
     console.log(e)
   })
+  group.add(text)
   group.add(rect1)
   group.add(rect)
   group.add(arc)
@@ -112,12 +112,11 @@ async function main() {
   can.add(group)
   await wait(500)
   // rect1.attr('x', 500)
-  can.translate(100, 200)
-  await wait(500)
-  can.scale(2, 2)
-  await wait(500)
-  can.rotate(Math.PI / 10)
-  console.dir(ctx)
+  // can.translate(100, 200)
+  // await wait(500)
+  // can.scale(2, 2)
+  // await wait(500)
+  // can.rotate(Math.PI / 10)
 }
 
 main()

@@ -25,8 +25,9 @@ export default class Arc extends Shape<ArcAttrs> {
       endAngle = PI2,
       anticlockwise = false,
       radius,
+      x,
+      y
     } = this.attrs();
-    const [x, y] = this._getShapePosition();
     this.path = new Path2D();
     this.path.arc(x, y, radius, startAngle, endAngle, anticlockwise);
     this.path.closePath();
@@ -36,7 +37,9 @@ export default class Arc extends Shape<ArcAttrs> {
     if (!this.path) return;
     this.fillOrStroke(ctx, this.path);
   }
-  isPointInShape(ctx: CanvasRenderingContext2D, e: MouseEvent) {
-    return this._isPointInShapePath(ctx, e);
+  renderHit(ctx: OffscreenCanvasRenderingContext2D) {
+    ctx.fillStyle = this.color
+    if (!this.path) return;
+    ctx.fill(this.path)
   }
 }

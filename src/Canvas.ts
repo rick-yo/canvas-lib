@@ -1,8 +1,16 @@
 import Shape, { applyShapeAttrsToContext, MousePosition } from './Shape'
 import EventEmitter from './EventEmitter'
-import { pxByPixelRatio, pixelRatio, Mutable, raiseError } from './utils'
-import containerMixin from './ShapeContainer'
-import ShapeContainer from './ShapeContainer'
+import eachAfter from './eachAfter'
+import {
+  pxByPixelRatio,
+  pixelRatio,
+  Mutable,
+  raiseError,
+  SHAPE_TYPE,
+} from './utils'
+import HitCanvas from './HitCanvas'
+import Group from './Group'
+import eachBefore from './eachBefore'
 
 export const CANVAS_RERENDER_EVENT_TYPE = 'canvas:rerender'
 
@@ -44,7 +52,9 @@ export default class Canvas extends EventEmitter {
   width: number = 300
   height: number = 150
   pixelRatio: number = pixelRatio
-  shapeContainer: ShapeContainer = new ShapeContainer()
+  root: Group = new Group({ x: 0, y: 0 })
+  hitCanvas: HitCanvas
+  hitContext: OffscreenCanvasRenderingContext2D
   constructor(
     canvas: HTMLCanvasElement,
     options: {
@@ -61,9 +71,15 @@ export default class Canvas extends EventEmitter {
     if (!ctx) {
       throw new Error('canvas context not found')
     }
+    const { width, height } = options
     this.ctx = ctx
-    this.width = options.width
-    this.height = options.height
+    this.width = width
+    this.height = height
+    this.hitCanvas = new HitCanvas({
+      width,
+      height,
+    })
+    this.hitContext = this.hitCanvas.getContext()
     this._setCanvasPixelRatio()
     this._handleMouseEvents()
     this._handleCanvasRerenderEvent()
@@ -75,8 +91,9 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   add(shape: Shape) {
-    this.shapeContainer.add(shape)
-    this._renderShape(shape)
+    shape.canvas = this
+    this.root.add(shape)
+    this._render()
   }
   /**
    * Remove a shape from Canvas
@@ -85,8 +102,9 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   remove(shape: Shape) {
-    this.shapeContainer.remove(shape)
     shape.canvas = null
+    this.hitCanvas.remove(shape)
+    this.root.remove(shape)
     this._render()
   }
   /**
@@ -96,10 +114,11 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   rotate(...angle: Parameters<CanvasTransform['rotate']>) {
-    this.ctx.save()
+    this.save()
     this.ctx.rotate(...angle)
+    this.hitContext.rotate(...angle)
     this._render()
-    this.ctx.restore()
+    this.restore()
   }
   /**
    * set Canvas scale, and Canvas will rerender automatically
@@ -128,10 +147,11 @@ export default class Canvas extends EventEmitter {
    */
   setTransform(...args: Parameters<CanvasTransform['transform']>) {
     // use `transform` to multiply current matrix to avoid reset canvas pixelRatio
-    this.ctx.save()
+    this.save()
     this.ctx.transform(...args)
+    this.hitContext.transform(...args)
     this._render()
-    this.ctx.restore()
+    this.restore()
   }
   /**
    * Remove all shapes from Canvas
@@ -139,11 +159,12 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   clear() {
-    this.shapeContainer.getShapes().forEach(shape => (shape.canvas = null))
-    this.shapeContainer.removeAll()
+    eachBefore(this.root, node => {
+      node.canvas = null
+    })
+    this.root.children = []
     this._clearCanvas()
   }
-  
   /**
    * Remove all shapes and clear all events on canvas
    *
@@ -170,21 +191,31 @@ export default class Canvas extends EventEmitter {
   }
   private _render = () => {
     this._clearCanvas()
-    this.shapeContainer.getShapes().forEach(shape => {
+    eachBefore(this.root, shape => {
       this._renderShape(shape)
     })
   }
-  /**
-   * apply shape's attr to context, after render, restore context
-   *
-   * @param {Shape} shape
-   */
   private _renderShape = (shape: Shape) => {
-    this.ctx.save()
-    shape.canvas = this
+    this.hitCanvas.add(shape)
+    if (shape.type === SHAPE_TYPE.group) {
+      applyShapeAttrsToContext(this.ctx, shape.attrs())
+      applyShapeAttrsToContext(this.hitContext, shape.attrs())
+      return
+    }
+    this.save()
     applyShapeAttrsToContext(this.ctx, shape.attrs())
+    applyShapeAttrsToContext(this.hitContext, shape.attrs())
     shape.render(this.ctx)
+    shape.renderHit(this.hitContext)
+    this.restore()
+  }
+  save() {
+    this.ctx.save()
+    this.hitContext.save()
+  }
+  restore() {
     this.ctx.restore()
+    this.hitContext.restore()
   }
   private _setCanvasPixelRatio = () => {
     this.canvasElement.style.width = `${this.width}px`
@@ -226,16 +257,11 @@ export default class Canvas extends EventEmitter {
    * @param {MouseEvent} e
    */
   private _emitShapeEvents = (e: MouseEvent) => {
-    const shapes = this.shapeContainer.getShapes()
-    const len = shapes.length
-    // 从后往前遍历，找到 "z-index" 最大的
-    for (let index = len - 1; index >= 0; index--) {
-      const shape = shapes[index]
-      if (!shape) continue
-      if (shape.isPointInShape(this.ctx, e)) {
-        shape._emitMouseEvent(e)
-        break
-      }
-    }
+    const { offsetX, offsetY } = e
+    const p = this.hitCanvas.getImageData(offsetX, offsetY)
+    const color = `rgb(${p[0]},${p[1]},${p[2]})`
+    eachAfter(this.root, node => {
+      if (node.color === color) node._emitMouseEvent(e)
+    })
   }
 }
