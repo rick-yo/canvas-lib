@@ -84,6 +84,7 @@ export default class Rect extends Shape<RectAttrs> {
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
     ctx.fillStyle = this.color
+    ctx.globalAlpha = 1
     if (!this.path) return
     ctx.fill(this.path)
   }

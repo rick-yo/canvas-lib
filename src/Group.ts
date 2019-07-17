@@ -1,9 +1,5 @@
 import { CANVAS_RERENDER_EVENT_TYPE } from './Canvas'
-import Shape, {
-  ShapeAttrs,
-  applyShapeAttrsToContext,
-  MousePosition,
-} from './Shape'
+import Shape, { ShapeAttrs, applyShapeAttrsToContext } from './Shape'
 import { pxByPixelRatio, SHAPE_TYPE } from './utils'
 
 export interface GroupAttrs extends ShapeAttrs {}
@@ -18,7 +14,7 @@ export interface GroupAttrs extends ShapeAttrs {}
  */
 export default class Group extends Shape {
   type = SHAPE_TYPE.group
-  children: Shape[] = []
+  children: (Shape | Group)[] = []
   constructor(attrs: GroupAttrs) {
     super(attrs)
   }
@@ -41,11 +37,43 @@ export default class Group extends Shape {
   remove(shape: Shape) {
     const index = this.children.indexOf(shape)
     if (index > -1) {
-      this.children[index].group = null
       this.children.splice(index, 1)
     }
-    shape.canvas = null
-    shape.group = null
+    shape.parent = null
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this)
+  }
+  /**
+   * overwrite shape.render, will render all Group.shapes, it apply group and shape's attr to context
+   * `render` will set shape.group to this group and shape.canvas to this.group.canvas
+   *
+   * @param {CanvasRenderingContext2D} ctx
+   * @memberof Group
+   */
+  render(ctx: CanvasRenderingContext2D) {
+    const { x, y, ...rest } = this.attrs()
+    const hitCanvas = this.canvas && this.canvas.hitCanvas
+    this.children.forEach(shape => {
+      ctx.save()
+      // rerender canvas
+      hitCanvas && hitCanvas.add(shape)
+      shape.parent = this
+      shape.canvas = this.canvas
+      ctx.transform(1, 0, 0, 1, x, y)
+      // group内shape的实际样式 = assign(group.attr, shape.attr)
+      applyShapeAttrsToContext(ctx, shape.attrs())
+      shape.render(ctx)
+      ctx.restore()
+    })
+  }
+  renderHit(ctx: OffscreenCanvasRenderingContext2D) {
+    const { x, y, ...rest } = this.attrs()
+    this.children.forEach(shape => {
+      ctx.save()
+      // group内shape的实际样式 = assign(group.attr, shape.attr)
+      ctx.transform(1, 0, 0, 1, x, y)
+      applyShapeAttrsToContext(ctx, shape.attrs())
+      shape.renderHit(ctx)
+      ctx.restore()
+    })
   }
 }

@@ -83,6 +83,7 @@ export default class Canvas extends EventEmitter {
     this._setCanvasPixelRatio()
     this._handleMouseEvents()
     this._handleCanvasRerenderEvent()
+    this.root.canvas = this
   }
   /**
    * Add a shape to Canvas and render
@@ -93,7 +94,6 @@ export default class Canvas extends EventEmitter {
   add(shape: Shape) {
     shape.canvas = this
     this.root.add(shape)
-    this._render()
   }
   /**
    * Remove a shape from Canvas
@@ -105,39 +105,6 @@ export default class Canvas extends EventEmitter {
     shape.canvas = null
     this.hitCanvas.remove(shape)
     this.root.remove(shape)
-    this._render()
-  }
-  /**
-   * set Canvas rotate, and Canvas will rerender automatically
-   *
-   * @param {...Parameters<CanvasTransform['rotate']>} angle
-   * @memberof Canvas
-   */
-  rotate(...angle: Parameters<CanvasTransform['rotate']>) {
-    this.save()
-    this.ctx.rotate(...angle)
-    this.hitContext.rotate(...angle)
-    this._render()
-    this.restore()
-  }
-  /**
-   * set Canvas scale, and Canvas will rerender automatically
-   *
-   * @param {...Parameters<CanvasTransform['scale']>} args
-   * @memberof Canvas
-   */
-  scale(...args: Parameters<CanvasTransform['scale']>) {
-    const [a, d] = args
-    this.setTransform(a, 0, 0, d, 0, 0)
-  }
-  /**
-   * set Canvas translate, and Canvas will rerender automatically
-   *
-   * @param {...Parameters<CanvasTransform['translate']>} args
-   * @memberof Canvas
-   */
-  translate(...args: Parameters<CanvasTransform['translate']>) {
-    this.setTransform(1, 0, 0, 1, ...args)
   }
   /**
    * set Canvas transform, and Canvas will rerender automatically
@@ -147,11 +114,7 @@ export default class Canvas extends EventEmitter {
    */
   setTransform(...args: Parameters<CanvasTransform['transform']>) {
     // use `transform` to multiply current matrix to avoid reset canvas pixelRatio
-    this.save()
-    this.ctx.transform(...args)
-    this.hitContext.transform(...args)
-    this._render()
-    this.restore()
+    this.root.attr('transform', args)
   }
   /**
    * Remove all shapes from Canvas
@@ -163,7 +126,7 @@ export default class Canvas extends EventEmitter {
       node.canvas = null
     })
     this.root.children = []
-    this._clearCanvas()
+    this.clearCanvas()
   }
   /**
    * Remove all shapes and clear all events on canvas
@@ -182,26 +145,21 @@ export default class Canvas extends EventEmitter {
    * @returns
    * @memberof Canvas
    */
-  private _clearCanvas() {
-    this.ctx.save()
+  clearCanvas() {
+    this.save()
     const canvas = this.canvasElement
     this.ctx.resetTransform()
     this.ctx.clearRect(0, 0, canvas.width, canvas.height)
-    this.ctx.restore()
+    this.hitCanvas.clearCanvas()
+    this.restore()
   }
   private _render = () => {
-    this._clearCanvas()
-    eachBefore(this.root, shape => {
-      this._renderShape(shape)
-    })
+    this.clearCanvas()
+    this._renderShape(this.root)
   }
-  private _renderShape = (shape: Shape) => {
+  private _renderShape = (shape: Group | Shape) => {
+    shape.canvas = this
     this.hitCanvas.add(shape)
-    if (shape.type === SHAPE_TYPE.group) {
-      applyShapeAttrsToContext(this.ctx, shape.attrs())
-      applyShapeAttrsToContext(this.hitContext, shape.attrs())
-      return
-    }
     this.save()
     applyShapeAttrsToContext(this.ctx, shape.attrs())
     applyShapeAttrsToContext(this.hitContext, shape.attrs())

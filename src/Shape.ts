@@ -25,6 +25,7 @@ export interface CanvasStyles
   rotate?: Parameters<CanvasTransform['rotate']>[0]
   translate?: Parameters<CanvasTransform['translate']>
   scale?: Parameters<CanvasTransform['scale']>
+  transform?: Parameters<CanvasTransform['transform']>
 }
 
 export type CanvasStylesKeys = keyof CanvasStyles
@@ -88,7 +89,7 @@ export default class Shape<
   type = 'shape'
   private _attrs: P
   canvas: Canvas | null = null
-  group: Group | null = null
+  parent: Group | null = null
   data: any
   color = ''
   protected path: Path2D | null = null
@@ -183,18 +184,22 @@ export default class Shape<
   renderHit(ctx: OffscreenCanvasRenderingContext2D): void {
     raiseError('renderHit method not implemented')
   }
-  protected _getShapeGroups() {
+  protected _getShapeParents() {
     let groups = []
-    let current = this.group
+    let current = this.parent
     while (current) {
       groups.push(current)
-      current = current.group
+      current = current.parent
     }
     return groups
   }
   public _emitMouseEvent(e: MouseEvent) {
     const position = this._getMousePosition(e)
     this.emit(position.type, position)
+    const parents = this._getShapeParents()
+    parents.forEach(parent => {
+      parent.emit(position.type, position)
+    })
   }
   protected _getMousePosition(e: MouseEvent): MousePosition {
     const { offsetX, offsetY, type } = e
@@ -213,30 +218,17 @@ export default class Shape<
 
 export function applyShapeAttrsToContext(
   ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
-  ..._attrs: ShapeAttrs[]
+  attrs: ShapeAttrs,
 ) {
   // group内shape的实际样式 = assign(group.attr, shape.attr)
-  const attrs = <ShapeAttrs>assign({}, ..._attrs.map(cloneDeep))
-  const { rotate, translate, scale, x, y, ...rest } = attrs
+  const { rotate, translate, scale, x, y, transform, ...rest } = attrs
   for (const key in rest) {
     if (rest.hasOwnProperty(key) && canvasStylesMap[key]) {
       // @ts-ignore
       ctx[key] = rest[key]
     }
   }
-  _attrs.forEach(attr => {
-    const { rotate, translate, scale, x, y, ...rest } = attr
-    if (x && y) {
-      ctx.translate(x, y)
-    }
-    if (translate) {
-      ctx.translate(...translate)
-    }
-    if (rotate) {
-      ctx.rotate(rotate)
-    }
-    if (scale) {
-      ctx.scale(...scale)
-    }
-  })
+  if (transform) {
+    ctx.transform(...transform)
+  }
 }

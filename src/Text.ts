@@ -28,7 +28,7 @@ export default class Text extends Shape<TextAttrs> {
     width = width || ctx.measureText(text).width
     this._setAttr('width', width)
     // fill
-    if (!maxWidth || width <= maxWidth) {
+    if (!maxWidth) {
       this.fillOrStrokeText(ctx, text)
       return
     }
@@ -59,7 +59,6 @@ export default class Text extends Shape<TextAttrs> {
     const { width, height, x, y } = this.attrs()
     if (!width || !height) return
     ctx.fillStyle = this.color
-    debugger
-    ctx.fillRect(x, y, width, height)
+    ctx.fillRect(x, y - height / 2, width, height)
   }
 }

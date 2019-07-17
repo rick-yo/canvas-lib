@@ -54,19 +54,16 @@ async function main() {
     fillStyle: 'green',
     sides: 5,
   })
-  if (img) {
-    const image = new Image({
-      x: 230,
-      y: 130,
-      width: 200,
-      height: 200,
-      image: img,
-    })
-    image.on('click', e => {
-      console.log(e)
-    })
-    can.add(image)
-  }
+  const image = new Image({
+    x: 230,
+    y: 130,
+    width: 200,
+    height: 200,
+    image: img,
+  })
+  image.on('click', e => {
+    console.log(e)
+  })
   const line = new Line({
     x: 500,
     y: 300,
@@ -110,13 +107,11 @@ async function main() {
   group.add(polygon)
   can.add(line)
   can.add(group)
+  can.add(image)
   await wait(500)
-  // rect1.attr('x', 500)
-  // can.translate(100, 200)
-  // await wait(500)
-  // can.scale(2, 2)
-  // await wait(500)
-  // can.rotate(Math.PI / 10)
+  rect1.attr('x', 500)
+  await wait(500)
+  await wait(500)
 }
 
 main()

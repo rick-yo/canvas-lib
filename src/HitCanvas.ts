@@ -44,7 +44,7 @@ export default class HitCanvas extends EventEmitter {
     return this.hitContext
   }
   add(shape: Shape) {
-    if (shape.color && this.colorHash[shape.color] === shape) return
+    if (shape.color) return
     const color = this.randomColor()
     shape.color = color
     this.colorHash[color] = shape
@@ -52,6 +52,14 @@ export default class HitCanvas extends EventEmitter {
   remove(shape: Shape) {
     shape.color = ''
     delete this.colorHash[shape.color]
+  }
+  clearCanvas() {
+    const canvas = this.offscreenCanvas
+    const ctx = this.getContext()
+    ctx.save()
+    ctx.resetTransform()
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.restore()
   }
   randomColor = (): string => {
     const r = Math.round(random(0, 255))

@@ -11,7 +11,7 @@ export interface ImageAttrs extends ShapeAttrs {
  * @extends {Shape<ImageAttrs>}
  */
 export default class Image extends Shape<ImageAttrs> {
-  type = 'image';
+  type = 'path';
   /**
    * Creates an instance of Image shape.
    * @param {ImageAttrs} attrs
@@ -27,6 +27,7 @@ export default class Image extends Shape<ImageAttrs> {
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
     ctx.strokeStyle = this.color
+    ctx.fillStyle = this.color
     if (!this.path) return
     ctx.stroke(this.path)
   }
