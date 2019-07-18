@@ -16,3 +16,30 @@ export type Mutable<ObjectType> = {
 export type Class<T = unknown> = new (...arguments_: any[]) => T
 
 export type Position = [number, number]
+
+export interface CanvasStyles
+  extends Partial<CanvasCompositing>,
+    Partial<CanvasFilters>,
+    Partial<CanvasShadowStyles>,
+    Partial<CanvasTextDrawingStyles>,
+    // CanvasFillStrokeStyles
+    Partial<Pick<CanvasFillStrokeStyles, 'fillStyle' | 'strokeStyle'>>,
+    // CanvasPathDrawingStyles
+    Partial<
+      Pick<
+        CanvasPathDrawingStyles,
+        'lineCap' | 'lineDashOffset' | 'lineJoin' | 'lineWidth' | 'miterLimit'
+      >
+    > {}
+
+export type CanvasStylesKeys = keyof CanvasStyles
+
+export interface ShapePositionMatrix {
+  x: number
+  y: number
+  transform?: CanvasTransformMatrix
+  // other transform
+  // rotate?: number
+  // translate?: XY
+  // scale?: XY
+}

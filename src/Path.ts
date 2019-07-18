@@ -20,7 +20,7 @@ export default class Image extends Shape<ImageAttrs> {
     super(attrs);
   }
   render(ctx: CanvasRenderingContext2D) {
-    const { width, height, path } = this.attrs();
+    const { path } = this.attrs();
     const path2d = new Path2D(path)
     ctx.stroke(path2d)
   }

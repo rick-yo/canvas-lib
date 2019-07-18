@@ -4,6 +4,8 @@ export interface TextAttrs extends ShapeAttrs {
   text: string
   font?: string
   maxWidth?: number
+  width?: number
+  height?: number
 }
 
 export default class Text extends Shape<TextAttrs> {

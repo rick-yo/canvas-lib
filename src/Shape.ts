@@ -1,34 +1,14 @@
-import { CANVAS_RERENDER_EVENT_TYPE } from './constant';
-import { CanvasTransformMatrix, MousePosition } from './types';
+import { CanvasStyles } from './../dist/types/Shape.d'
+import { CANVAS_RERENDER_EVENT_TYPE } from './constant'
+import {
+  CanvasTransformMatrix,
+  MousePosition,
+  ShapePositionMatrix,
+} from './types'
 import EventEmitter from './EventEmitter'
 import Canvas from './Canvas'
 import Group from './Group'
-import {
-  raiseError,
-} from './utils'
-
-export interface CanvasStyles
-  extends Partial<CanvasCompositing>,
-    Partial<CanvasFilters>,
-    Partial<CanvasShadowStyles>,
-    Partial<CanvasTextDrawingStyles>,
-    // CanvasFillStrokeStyles
-    Partial<Pick<CanvasFillStrokeStyles, 'fillStyle' | 'strokeStyle'>>,
-    // CanvasPathDrawingStyles
-    Partial<
-      Pick<
-        CanvasPathDrawingStyles,
-        'lineCap' | 'lineDashOffset' | 'lineJoin' | 'lineWidth' | 'miterLimit'
-      >
-    > {
-  // transform
-  // rotate?: number
-  // translate?: XY
-  // scale?: XY
-  transform?: CanvasTransformMatrix
-}
-
-export type CanvasStylesKeys = keyof CanvasStyles
+import { raiseError } from './utils'
 
 export const canvasStylesMap: Dictionary<boolean> = {
   fillStyle: true,
@@ -51,12 +31,7 @@ export const canvasStylesMap: Dictionary<boolean> = {
   textBaseline: true,
 }
 
-export interface ShapeAttrs extends CanvasStyles {
-  x: number
-  y: number
-  width?: number
-  height?: number
-}
+export interface ShapeAttrs extends CanvasStyles, ShapePositionMatrix {}
 
 /**
  * Basic shape class for rect circle path etc.
@@ -184,39 +159,5 @@ export default class Shape<
   }
   protected _emitCanvasRerender() {
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this)
-  }
-}
-
-export function applyShapeAttrsToContext(
-  ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
-  attrs: ShapeAttrs,
-  isGroup?: boolean,
-) {
-  // group内shape的实际样式 = assign(group.attr, shape.attr)
-  const {
-    x = 0,
-    y = 0,
-    transform = [1, 0, 0, 1, 0, 0],
-    width,
-    height,
-    ...rest
-  } = attrs
-  for (const key in rest) {
-    if (rest.hasOwnProperty(key) && canvasStylesMap[key]) {
-      // @ts-ignore
-      ctx[key] = rest[key]
-    }
-  }
-
-  // only transform in group to affect group's shapes position
-  if (isGroup) {
-    const a = transform[0]
-    const b = transform[1]
-    const c = transform[2]
-    const d = transform[3]
-    const e = x + transform[4]
-    const f = y + transform[5]
-    // use `transform` to multiply current matrix to avoid reset canvas pixelRatio
-    ctx.transform(a, b, c, d, e, f)
   }
 }

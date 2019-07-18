@@ -1,4 +1,5 @@
-import Shape, { ShapeAttrs, applyShapeAttrsToContext } from './Shape'
+import { CanvasStyles, CanvasStylesKeys, ShapePositionMatrix } from './types';
+import Shape, { ShapeAttrs, canvasStylesMap } from './Shape'
 import { pxByPixelRatio, SHAPE_TYPE } from './utils'
 
 export interface GroupAttrs extends ShapeAttrs {}
@@ -52,31 +53,72 @@ export default class Group extends Shape {
    * @memberof Group
    */
   render(ctx: CanvasRenderingContext2D) {
+    const { x, y, transform, ...rest } = this.attrs()
     const hitCanvas = this.canvas && this.canvas.hitCanvas
     hitCanvas && hitCanvas.add(this)
     ctx.save()
-    applyShapeAttrsToContext(ctx, this.attrs(), true)
+    applyShapeTransformToContext(ctx, {
+      x,
+      y,
+      transform,
+    })
     this.children.forEach(shape => {
       shape.canvas = this.canvas
       ctx.save()
       hitCanvas && hitCanvas.add(shape)
       // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeAttrsToContext(ctx, shape.attrs(), false)
+      applyShapeStyleToContext(ctx, rest)
       shape.render(ctx)
       ctx.restore()
     })
     ctx.restore()
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
+    const { x, y, transform, ...rest } = this.attrs()
     ctx.save()
-    applyShapeAttrsToContext(ctx, this.attrs(), true)
+    applyShapeTransformToContext(ctx, {
+      x,
+      y,
+      transform,
+    })
     this.children.forEach(shape => {
       ctx.save()
       // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeAttrsToContext(ctx, shape.attrs(), false)
+      applyShapeStyleToContext(ctx, rest)
       shape.renderHit(ctx)
       ctx.restore()
     })
     ctx.restore()
   }
+}
+
+function applyShapeStyleToContext(
+  ctx: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
+  styles: CanvasStyles,
+) {
+  // group内shape的实际样式 = assign(group.attr, shape.attr)
+  for (const key in styles) {
+    if (styles.hasOwnProperty(key) && canvasStylesMap[key]) {
+      // @ts-ignore
+      ctx[key] = styles[key as CanvasStylesKeys]
+    }
+  }
+}
+
+function applyShapeTransformToContext(
+  ctx: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
+  matrix: ShapePositionMatrix,
+) {
+  // group内shape的实际样式 = assign(group.attr, shape.attr)
+  const { x = 0, y = 0, transform = [1, 0, 0, 1, 0, 0] } = matrix
+
+  // only transform in group to affect group's shapes position
+  const a = transform[0]
+  const b = transform[1]
+  const c = transform[2]
+  const d = transform[3]
+  const e = x + transform[4]
+  const f = y + transform[5]
+  // use `transform` to multiply current matrix to avoid reset canvas pixelRatio
+  ctx.transform(a, b, c, d, e, f)
 }
