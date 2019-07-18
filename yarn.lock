@@ -35,7 +35,7 @@
   resolved "https://registry.npm.taobao.org/@types/highlight.js/download/@types/highlight.js-9.12.3.tgz#b672cfaac25cbbc634a0fd92c515f66faa18dbca"
   integrity sha1-tnLPqsJcu8Y0oP2SxRX2b6oY28o=
 
-"@types/lodash@^4.14.110", "@types/lodash@^4.14.135":
+"@types/lodash@^4.14.110":
   version "4.14.135"
   resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.135.tgz#d2607c35dd68f70c2b35ba020c667493dedd8447"
   integrity sha1-0mB8Nd1o9wwrNboCDGZ0k97dhEc=
@@ -158,7 +158,7 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-lodash@^4.17.10, lodash@^4.17.11:
+lodash@^4.17.10:
   version "4.17.11"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha1-s56mIp72B+zYniyN8SU2iRysm40=

@@ -26,11 +26,8 @@
     "url": "https://github.com/luv-sic/canvas-lib/issues"
   },
   "homepage": "https://github.com/luv-sic/canvas-lib#readme",
-  "dependencies": {
-    "lodash": "^4.17.11"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/lodash": "^4.14.135",
     "typedoc": "^0.14.2",
     "typescript": "^3.5.2"
   }

@@ -1,7 +1,7 @@
 import Shape from './Shape'
 
 export type MousePosition = Mutable<
-  Pick<MouseEvent, 'offsetX' | 'offsetY' | 'type'>
+  Pick<MouseEvent, 'offsetX' | 'offsetY' | 'type' | 'movementX' | 'movementY'>
 > & {
   target?: Shape<any>
 }

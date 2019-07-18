@@ -30,6 +30,7 @@ async function main() {
     fillStyle: '#000',
     radius: [5, 5, 10, 20],
     shadowColor: '#000',
+    draggable: true,
   })
   const rect1 = new Rect({
     x: 130,

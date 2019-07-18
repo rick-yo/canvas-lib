@@ -11,7 +11,6 @@ import {
 } from './utils'
 import HitCanvas from './HitCanvas'
 import Group from './Group'
-import eachBefore from './eachBefore'
 
 type MouseEventType =
   | 'click'
@@ -27,7 +26,7 @@ const MOUSE_EVENTS: MouseEventType[] = [
   'dblclick',
   'mousedown',
   'mouseup',
-  // 'mousemove',
+  'mousemove',
 ]
 
 /**

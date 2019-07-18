@@ -1,4 +1,4 @@
-import { CanvasStyles } from './../dist/types/Shape.d'
+import { CanvasStyles } from './types'
 import { CANVAS_RERENDER_EVENT_TYPE } from './constant'
 import {
   CanvasTransformMatrix,
@@ -31,7 +31,9 @@ export const canvasStylesMap: Dictionary<boolean> = {
   textBaseline: true,
 }
 
-export interface ShapeAttrs extends CanvasStyles, ShapePositionMatrix {}
+export interface ShapeAttrs extends CanvasStyles, ShapePositionMatrix {
+  draggable?: boolean
+}
 
 /**
  * Basic shape class for rect circle path etc.
@@ -59,8 +61,14 @@ export default class Shape<
    * @memberof Shape
    */
   constructor(attrs: P) {
-    super()
-    this._attrs = attrs
+    super();
+    this._attrs = attrs;
+    const { draggable } = this._attrs;
+    if(draggable) {
+      this._unHandleDrag()
+      this.on('mousedown', this.handleDragStart)
+      this.on('mouseup', this.handleDragEnd)
+    }
   }
   attr<K extends keyof P>(key: K): P[K]
   attr<K extends keyof P>(key: K, value: P[K]): void
@@ -148,16 +156,39 @@ export default class Shape<
     })
   }
   protected _getMousePosition(e: MouseEvent): MousePosition {
-    const { offsetX, offsetY, type } = e
+    const { offsetX, offsetY, type, movementX, movementY } = e;
     const position: MousePosition = {
       offsetX,
       offsetY,
       type,
       target: this,
-    }
-    return position
+      movementX,
+      movementY
+    };
+    return position;
   }
   protected _emitCanvasRerender() {
-    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this)
+    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
+  }
+  private _unHandleDrag = () => {
+    this.off('mousedown', this.handleDragStart)
+    this.off('mousemove', this.handleDrag)
+    this.off('mouseup', this.handleDragEnd)
+  }
+  private handleDragStart = (e: MousePosition) => {
+    this.on('mousemove', this.handleDrag)
+    this.emit('dragstart', e)
+  }
+  private handleDrag = (e: MousePosition) => {
+    const { movementX, movementY } = e;
+    this._setAttr('x', this._attrs.x + movementX)
+    this._setAttr('y', this._attrs.y + movementY)
+    this._emitCanvasRerender()
+    this.emit('drag', e)
+  }
+  private handleDragEnd = (e: MousePosition) => {
+    this.off('mousemove', this.handleDrag)
+    this.emit('dragend', e)
   }
 }
+
