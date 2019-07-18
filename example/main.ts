@@ -1,6 +1,5 @@
 import Canvas from '../src/Canvas'
 import { Arc, Polygon, Group, Line, Text, Rect, Image } from '../src'
-import { toNumber } from 'lodash'
 
 function wait(millSecond: number) {
   return new Promise(resolve => {

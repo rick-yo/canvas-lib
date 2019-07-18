@@ -1,4 +1,4 @@
-import Shape, { ShapeAttrs, MousePosition } from './Shape'
+import Shape, { ShapeAttrs } from './Shape'
 
 export interface LineAttrs extends ShapeAttrs {
   x1: number

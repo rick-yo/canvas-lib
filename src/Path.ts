@@ -1,5 +1,4 @@
-import Shape, { ShapeAttrs, MousePosition } from './Shape';
-import inRange from 'lodash/inRange';
+import Shape, { ShapeAttrs } from './Shape';
 
 export interface ImageAttrs extends ShapeAttrs {
   path: string;

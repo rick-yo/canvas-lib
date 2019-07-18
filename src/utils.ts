@@ -1,27 +1,20 @@
-const prefix = '[canvas-lib]: ';
+import { prefix } from "./constant";
+
 export const pixelRatio = Math.round(window.devicePixelRatio || 1);
 export enum SHAPE_TYPE {
   group = 'group'
 }
-export type CanvasTransformMatrix = Parameters<CanvasTransform['transform']>
 
 export function pxByPixelRatio(px: number) {
   return Math.round(pixelRatio * px);
 }
 
-export type Mutable<ObjectType> = {
-  -readonly // For each `Key` in the keys of `ObjectType`, make a mapped type by removing the `readonly` modifier from the property.
-  [KeyType in keyof ObjectType]: ObjectType[KeyType]
-};
 
 export function raiseError(message: string) {
   throw new Error(prefix + message);
 }
-
-export type Class<T = unknown> = new(...arguments_: any[]) => T;
-
+      
 export function random(min: number, max: number) {
   return min + Math.random() * (max - min + 1);
 }
 
-export type Position = [number, number]

@@ -1,13 +1,10 @@
 import EventEmitter from './EventEmitter'
 import {
-  pxByPixelRatio,
   pixelRatio,
-  Mutable,
-  raiseError,
   random,
 } from './utils'
-import isFunction from 'lodash/isFunction'
 import Shape from './Shape'
+
 function getOffscreenCanvas(width: number, height: number) {
   return new OffscreenCanvas(width, height)
 }

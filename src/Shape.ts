@@ -1,17 +1,11 @@
+import { CANVAS_RERENDER_EVENT_TYPE } from './constant';
+import { CanvasTransformMatrix, MousePosition } from './types';
 import EventEmitter from './EventEmitter'
-import Canvas, { CANVAS_RERENDER_EVENT_TYPE } from './Canvas'
-import cloneDeep from 'lodash/cloneDeep'
-import assign from 'lodash/assign'
-import { Dictionary } from 'lodash'
+import Canvas from './Canvas'
 import Group from './Group'
 import {
-  Mutable,
-  pxByPixelRatio,
   raiseError,
-  CanvasTransformMatrix,
-  Position,
 } from './utils'
-import inRange from 'lodash/inRange'
 
 export interface CanvasStyles
   extends Partial<CanvasCompositing>,
@@ -35,12 +29,6 @@ export interface CanvasStyles
 }
 
 export type CanvasStylesKeys = keyof CanvasStyles
-
-export type MousePosition = Mutable<
-  Pick<MouseEvent, 'offsetX' | 'offsetY' | 'type'>
-> & {
-  target?: Shape<any>
-}
 
 export const canvasStylesMap: Dictionary<boolean> = {
   fillStyle: true,
@@ -69,16 +57,6 @@ export interface ShapeAttrs extends CanvasStyles {
   width?: number
   height?: number
 }
-
-type ShapeAttrsKeys = keyof ShapeAttrs
-
-const INT_ATTR_KEYS: ShapeAttrsKeys[] = [
-  'x',
-  'y',
-  'width',
-  'height',
-  'lineWidth',
-]
 
 /**
  * Basic shape class for rect circle path etc.

@@ -1,4 +1,4 @@
-import Shape, { ShapeAttrs, MousePosition } from './Shape'
+import Shape, { ShapeAttrs } from './Shape'
 
 export interface TextAttrs extends ShapeAttrs {
   text: string

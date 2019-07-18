@@ -1,5 +1,4 @@
-import inRange from 'lodash/inRange';
-import Shape, { ShapeAttrs, MousePosition } from './Shape';
+import Shape, { ShapeAttrs } from './Shape';
 
 export interface RectAttrs extends ShapeAttrs {
   radius?: number[];

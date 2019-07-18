@@ -1,19 +1,17 @@
+import { CANVAS_RERENDER_EVENT_TYPE } from './constant';
+import { CanvasTransformMatrix } from './types';
 import Shape from './Shape'
 import EventEmitter from './EventEmitter'
 import eachAfter from './eachAfter'
 import {
   pxByPixelRatio,
   pixelRatio,
-  Mutable,
   raiseError,
   SHAPE_TYPE,
-  CanvasTransformMatrix,
 } from './utils'
 import HitCanvas from './HitCanvas'
 import Group from './Group'
 import eachBefore from './eachBefore'
-
-export const CANVAS_RERENDER_EVENT_TYPE = 'canvas:rerender'
 
 type MouseEventType =
   | 'click'
