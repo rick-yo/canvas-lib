@@ -1,4 +1,3 @@
-import { CANVAS_RERENDER_EVENT_TYPE } from './Canvas'
 import Shape, { ShapeAttrs, applyShapeAttrsToContext } from './Shape'
 import { pxByPixelRatio, SHAPE_TYPE } from './utils'
 
@@ -25,8 +24,10 @@ export default class Group extends Shape {
    * @memberof Group
    */
   add(shape: Shape) {
+    shape.parent = this
+    shape.canvas = this.canvas
     this.children.push(shape)
-    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this)
+    this._emitCanvasRerender()
   }
   /**
    * Remove a shape from group
@@ -40,7 +41,8 @@ export default class Group extends Shape {
       this.children.splice(index, 1)
     }
     shape.parent = null
-    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this)
+    shape.canvas = null
+    this._emitCanvasRerender()
   }
   /**
    * overwrite shape.render, will render all Group.shapes, it apply group and shape's attr to context
@@ -50,30 +52,31 @@ export default class Group extends Shape {
    * @memberof Group
    */
   render(ctx: CanvasRenderingContext2D) {
-    const { x, y, ...rest } = this.attrs()
     const hitCanvas = this.canvas && this.canvas.hitCanvas
+    hitCanvas && hitCanvas.add(this)
+    ctx.save()
+    applyShapeAttrsToContext(ctx, this.attrs(), true)
     this.children.forEach(shape => {
-      ctx.save()
-      // rerender canvas
-      hitCanvas && hitCanvas.add(shape)
-      shape.parent = this
       shape.canvas = this.canvas
-      ctx.transform(1, 0, 0, 1, x, y)
+      ctx.save()
+      hitCanvas && hitCanvas.add(shape)
       // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeAttrsToContext(ctx, shape.attrs())
+      applyShapeAttrsToContext(ctx, shape.attrs(), false)
       shape.render(ctx)
       ctx.restore()
     })
+    ctx.restore()
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
-    const { x, y, ...rest } = this.attrs()
+    ctx.save()
+    applyShapeAttrsToContext(ctx, this.attrs(), true)
     this.children.forEach(shape => {
       ctx.save()
       // group内shape的实际样式 = assign(group.attr, shape.attr)
-      ctx.transform(1, 0, 0, 1, x, y)
-      applyShapeAttrsToContext(ctx, shape.attrs())
+      applyShapeAttrsToContext(ctx, shape.attrs(), false)
       shape.renderHit(ctx)
       ctx.restore()
     })
+    ctx.restore()
   }
 }

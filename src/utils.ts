@@ -3,6 +3,7 @@ export const pixelRatio = Math.round(window.devicePixelRatio || 1);
 export enum SHAPE_TYPE {
   group = 'group'
 }
+export type CanvasTransformMatrix = Parameters<CanvasTransform['transform']>
 
 export function pxByPixelRatio(px: number) {
   return Math.round(pixelRatio * px);
@@ -22,3 +23,5 @@ export type Class<T = unknown> = new(...arguments_: any[]) => T;
 export function random(min: number, max: number) {
   return min + Math.random() * (max - min + 1);
 }
+
+export type Position = [number, number]

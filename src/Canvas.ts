@@ -1,4 +1,4 @@
-import Shape, { applyShapeAttrsToContext, MousePosition } from './Shape'
+import Shape from './Shape'
 import EventEmitter from './EventEmitter'
 import eachAfter from './eachAfter'
 import {
@@ -7,6 +7,7 @@ import {
   Mutable,
   raiseError,
   SHAPE_TYPE,
+  CanvasTransformMatrix,
 } from './utils'
 import HitCanvas from './HitCanvas'
 import Group from './Group'
@@ -19,24 +20,16 @@ type MouseEventType =
   | 'contextmenu'
   | 'dblclick'
   | 'mousedown'
-  | 'mouseenter'
-  | 'mouseleave'
-  | 'mousemove'
-  | 'mouseout'
-  | 'mouseover'
   | 'mouseup'
+  | 'mousemove'
 
 const MOUSE_EVENTS: MouseEventType[] = [
   'click',
   'contextmenu',
   'dblclick',
   'mousedown',
-  'mouseenter',
-  'mouseleave',
-  'mousemove',
-  'mouseout',
-  'mouseover',
   'mouseup',
+  // 'mousemove',
 ]
 
 /**
@@ -109,11 +102,10 @@ export default class Canvas extends EventEmitter {
   /**
    * set Canvas transform, and Canvas will rerender automatically
    *
-   * @param {...Parameters<CanvasTransform['transform']>} args
+   * @param {CanvasTransformMatrix} args
    * @memberof Canvas
    */
-  setTransform(...args: Parameters<CanvasTransform['transform']>) {
-    // use `transform` to multiply current matrix to avoid reset canvas pixelRatio
+  setTransform(...args: CanvasTransformMatrix) {
     this.root.attr('transform', args)
   }
   /**
@@ -122,9 +114,6 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   clear() {
-    eachBefore(this.root, node => {
-      node.canvas = null
-    })
     this.root.children = []
     this.clearCanvas()
   }
@@ -146,34 +135,18 @@ export default class Canvas extends EventEmitter {
    * @memberof Canvas
    */
   clearCanvas() {
-    this.save()
+    this.ctx.save()
     const canvas = this.canvasElement
     this.ctx.resetTransform()
     this.ctx.clearRect(0, 0, canvas.width, canvas.height)
-    this.hitCanvas.clearCanvas()
-    this.restore()
-  }
-  private _render = () => {
-    this.clearCanvas()
-    this._renderShape(this.root)
-  }
-  private _renderShape = (shape: Group | Shape) => {
-    shape.canvas = this
-    this.hitCanvas.add(shape)
-    this.save()
-    applyShapeAttrsToContext(this.ctx, shape.attrs())
-    applyShapeAttrsToContext(this.hitContext, shape.attrs())
-    shape.render(this.ctx)
-    shape.renderHit(this.hitContext)
-    this.restore()
-  }
-  save() {
-    this.ctx.save()
-    this.hitContext.save()
-  }
-  restore() {
     this.ctx.restore()
-    this.hitContext.restore()
+    this.hitCanvas.clearCanvas()
+  }
+  render = () => {
+    this.clearCanvas()
+    this.hitCanvas.add(this.root)
+    this.root.render(this.ctx)
+    this.root.renderHit(this.hitContext)
   }
   private _setCanvasPixelRatio = () => {
     this.canvasElement.style.width = `${this.width}px`
@@ -188,10 +161,10 @@ export default class Canvas extends EventEmitter {
     this.ctx.scale(1, 1)
   }
   private _handleCanvasRerenderEvent = () => {
-    this.on(CANVAS_RERENDER_EVENT_TYPE, this._render)
+    this.on(CANVAS_RERENDER_EVENT_TYPE, this.render)
   }
   private _unhandleCanvasRerenderEvent = () => {
-    this.off(CANVAS_RERENDER_EVENT_TYPE, this._render)
+    this.off(CANVAS_RERENDER_EVENT_TYPE, this.render)
   }
   private _handleMouseEvents() {
     MOUSE_EVENTS.forEach(key => {

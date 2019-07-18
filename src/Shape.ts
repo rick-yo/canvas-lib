@@ -4,7 +4,13 @@ import cloneDeep from 'lodash/cloneDeep'
 import assign from 'lodash/assign'
 import { Dictionary } from 'lodash'
 import Group from './Group'
-import { Mutable, pxByPixelRatio, raiseError, pixelRatio } from './utils'
+import {
+  Mutable,
+  pxByPixelRatio,
+  raiseError,
+  CanvasTransformMatrix,
+  Position,
+} from './utils'
 import inRange from 'lodash/inRange'
 
 export interface CanvasStyles
@@ -22,10 +28,10 @@ export interface CanvasStyles
       >
     > {
   // transform
-  rotate?: Parameters<CanvasTransform['rotate']>[0]
-  translate?: Parameters<CanvasTransform['translate']>
-  scale?: Parameters<CanvasTransform['scale']>
-  transform?: Parameters<CanvasTransform['transform']>
+  // rotate?: number
+  // translate?: XY
+  // scale?: XY
+  transform?: CanvasTransformMatrix
 }
 
 export type CanvasStylesKeys = keyof CanvasStyles
@@ -35,7 +41,7 @@ export type MousePosition = Mutable<
 > & {
   target?: Shape<any>
 }
-type Position = [number, number]
+
 export const canvasStylesMap: Dictionary<boolean> = {
   fillStyle: true,
   strokeStyle: true,
@@ -63,6 +69,7 @@ export interface ShapeAttrs extends CanvasStyles {
   width?: number
   height?: number
 }
+
 type ShapeAttrsKeys = keyof ShapeAttrs
 
 const INT_ATTR_KEYS: ShapeAttrsKeys[] = [
@@ -114,7 +121,7 @@ export default class Shape<
   attr<K extends keyof P>(key: K, value?: P[K]) {
     if (!value) return this._attrs[key]
     this._setAttr(key, value)
-    this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this)
+    this._emitCanvasRerender()
   }
   attrs() {
     return this._attrs
@@ -128,20 +135,6 @@ export default class Shape<
    */
   protected _setAttr = <K extends keyof P>(key: K, value: P[K]) => {
     this._attrs[key] = value
-  }
-  /**
-   * get shape's real attr, affected by group and scale
-   *
-   * @param {keyof P} key
-   * @returns
-   */
-  protected _getAttr = (key: keyof P) => {
-    // @ts-ignore
-    if (INT_ATTR_KEYS.indexOf(key) > -1) {
-      // @ts-ignore
-      return pxByPixelRatio(this._attrs[key])
-    }
-    return this._attrs[key]
   }
   /**
    * Store data in shape, you can get it in `on` callback later.
@@ -219,16 +212,33 @@ export default class Shape<
 export function applyShapeAttrsToContext(
   ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
   attrs: ShapeAttrs,
+  isGroup?: boolean,
 ) {
   // group内shape的实际样式 = assign(group.attr, shape.attr)
-  const { rotate, translate, scale, x, y, transform, ...rest } = attrs
+  const {
+    x = 0,
+    y = 0,
+    transform = [1, 0, 0, 1, 0, 0],
+    width,
+    height,
+    ...rest
+  } = attrs
   for (const key in rest) {
     if (rest.hasOwnProperty(key) && canvasStylesMap[key]) {
       // @ts-ignore
       ctx[key] = rest[key]
     }
   }
-  if (transform) {
-    ctx.transform(...transform)
+
+  // only transform in group to affect group's shapes position
+  if (isGroup) {
+    const a = transform[0]
+    const b = transform[1]
+    const c = transform[2]
+    const d = transform[3]
+    const e = x + transform[4]
+    const f = y + transform[5]
+    // use `transform` to multiply current matrix to avoid reset canvas pixelRatio
+    ctx.transform(a, b, c, d, e, f)
   }
 }
