@@ -25,8 +25,6 @@ export default class Image extends Shape<ImageAttrs> {
     ctx.stroke(path2d)
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
-    ctx.strokeStyle = this.color
-    ctx.fillStyle = this.color
     if (!this.path) return
     ctx.stroke(this.path)
   }

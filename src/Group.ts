@@ -1,4 +1,4 @@
-import { CanvasStyles, CanvasStylesKeys, ShapePositionMatrix } from './types';
+import { CanvasStyles, CanvasStylesKeys, ShapePositionMatrix } from './types'
 import Shape, { ShapeAttrs, canvasStylesMap } from './Shape'
 import { pxByPixelRatio, SHAPE_TYPE } from './utils'
 
@@ -74,7 +74,7 @@ export default class Group extends Shape {
     ctx.restore()
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
-    const { x, y, transform, ...rest } = this.attrs()
+    const { x, y, transform } = this.attrs()
     ctx.save()
     applyShapeTransformToContext(ctx, {
       x,
@@ -84,7 +84,7 @@ export default class Group extends Shape {
     this.children.forEach(shape => {
       ctx.save()
       // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeStyleToContext(ctx, rest)
+      applyHitStyleToContext(ctx, shape)
       shape.renderHit(ctx)
       ctx.restore()
     })
@@ -121,4 +121,14 @@ function applyShapeTransformToContext(
   const f = y + transform[5]
   // use `transform` to multiply current matrix to avoid reset canvas pixelRatio
   ctx.transform(a, b, c, d, e, f)
+}
+
+function applyHitStyleToContext(
+  ctx: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
+  shape: Shape,
+) {
+  // apply special draw context to shape
+  ctx.globalAlpha = 1
+  ctx.fillStyle = shape.color
+  ctx.strokeStyle = shape.color
 }

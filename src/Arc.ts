@@ -37,7 +37,6 @@ export default class Arc extends Shape<ArcAttrs> {
     this.fillOrStroke(ctx, this.path);
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
-    ctx.fillStyle = this.color
     if (!this.path) return;
     ctx.fill(this.path)
   }

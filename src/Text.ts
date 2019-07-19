@@ -60,7 +60,6 @@ export default class Text extends Shape<TextAttrs> {
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
     const { width, height, x, y } = this.attrs()
     if (!width || !height) return
-    ctx.fillStyle = this.color
     ctx.fillRect(x, y - height / 2, width, height)
   }
 }

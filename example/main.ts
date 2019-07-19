@@ -30,7 +30,6 @@ async function main() {
     fillStyle: '#000',
     radius: [5, 5, 10, 20],
     shadowColor: '#000',
-    draggable: true,
   })
   const rect1 = new Rect({
     x: 130,
@@ -75,6 +74,7 @@ async function main() {
   const group = new Group({
     x: 500,
     y: 110,
+    draggable: true,
   })
   const text = new Text({
     text: '测试测试测试测试',

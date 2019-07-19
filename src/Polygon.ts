@@ -44,7 +44,6 @@ export default class Polygon extends Shape<PolygonAttrs> {
     }
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
-    ctx.fillStyle = this.color
     if (!this.path) return
     ctx.fill(this.path)
   }

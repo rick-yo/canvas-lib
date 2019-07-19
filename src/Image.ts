@@ -27,7 +27,6 @@ export default class Image extends Shape<ImageAttrs> {
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
     const { width, height, image, x, y } = this.attrs();
-    ctx.fillStyle = this.color
     ctx.fillRect(x, y, width, height);
   }
 }
