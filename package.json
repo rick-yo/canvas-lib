@@ -2,7 +2,7 @@
   "name": "canvas-lib",
   "version": "0.0.3",
   "description": "canvas library with a delightful API",
-  "main": "src/index.ts",
+  "main": "dist/lib/index.js",
   "typings": "dist/types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
