@@ -1,9 +1,9 @@
-import { CanvasStyles } from './../dist/types/Shape.d'
 import { CANVAS_RERENDER_EVENT_TYPE } from './constant'
 import {
   CanvasTransformMatrix,
   MousePosition,
   ShapePositionMatrix,
+  CanvasStyles,
 } from './types'
 import EventEmitter from './EventEmitter'
 import Canvas from './Canvas'

@@ -62,12 +62,13 @@ export default class Group extends Shape {
       y,
       transform,
     })
+    applyShapeStyleToContext(ctx, rest)
     this.children.forEach(shape => {
       shape.canvas = this.canvas
       ctx.save()
       hitCanvas && hitCanvas.add(shape)
       // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeStyleToContext(ctx, rest)
+      applyShapeStyleToContext(ctx, shape.attrs())
       shape.render(ctx)
       ctx.restore()
     })
@@ -81,10 +82,11 @@ export default class Group extends Shape {
       y,
       transform,
     })
+    applyShapeStyleToContext(ctx, rest)
     this.children.forEach(shape => {
       ctx.save()
       // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeStyleToContext(ctx, rest)
+      applyShapeStyleToContext(ctx, shape.attrs())
       shape.renderHit(ctx)
       ctx.restore()
     })
