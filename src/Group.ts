@@ -62,28 +62,30 @@ export default class Group extends Shape {
       y,
       transform,
     })
+    applyShapeStyleToContext(ctx, rest)
     this.children.forEach(shape => {
       shape.canvas = this.canvas
       ctx.save()
       hitCanvas && hitCanvas.add(shape)
-      // group内shape的实际样式 = assign(group.attr, shape.attr)
-      applyShapeStyleToContext(ctx, rest)
+      // group.attr = assign(group.attr, shape.attr)
+      applyShapeStyleToContext(ctx, shape.attrs())
       shape.render(ctx)
       ctx.restore()
     })
     ctx.restore()
   }
   renderHit(ctx: OffscreenCanvasRenderingContext2D) {
-    const { x, y, transform } = this.attrs()
+    const { x, y, transform, ...rest } = this.attrs()
     ctx.save()
     applyShapeTransformToContext(ctx, {
       x,
       y,
       transform,
     })
+    applyShapeStyleToContext(ctx, rest)
     this.children.forEach(shape => {
       ctx.save()
-      // group内shape的实际样式 = assign(group.attr, shape.attr)
+      // special case for hitCanvas
       applyHitStyleToContext(ctx, shape)
       shape.renderHit(ctx)
       ctx.restore()
@@ -96,7 +98,6 @@ function applyShapeStyleToContext(
   ctx: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   styles: CanvasStyles,
 ) {
-  // group内shape的实际样式 = assign(group.attr, shape.attr)
   for (const key in styles) {
     if (styles.hasOwnProperty(key) && canvasStylesMap[key]) {
       // @ts-ignore
@@ -105,14 +106,13 @@ function applyShapeStyleToContext(
   }
 }
 
+// only transform in group to affect group's shapes position
 function applyShapeTransformToContext(
   ctx: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   matrix: ShapePositionMatrix,
 ) {
-  // group内shape的实际样式 = assign(group.attr, shape.attr)
   const { x = 0, y = 0, transform = [1, 0, 0, 1, 0, 0] } = matrix
 
-  // only transform in group to affect group's shapes position
   const a = transform[0]
   const b = transform[1]
   const c = transform[2]
@@ -127,7 +127,7 @@ function applyHitStyleToContext(
   ctx: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   shape: Shape,
 ) {
-  // apply special draw context to shape
+  // apply special draw context to hitCanvas
   ctx.globalAlpha = 1
   ctx.fillStyle = shape.color
   ctx.strokeStyle = shape.color

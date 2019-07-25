@@ -1,5 +1,6 @@
 import Canvas from '../src/Canvas'
 import { Arc, Polygon, Group, Line, Text, Rect, Image } from '../src'
+import { mouse } from '../src/constant';
 
 function wait(millSecond: number) {
   return new Promise(resolve => {
@@ -22,6 +23,7 @@ async function main() {
     width,
     height,
   })
+  can.debug = true
   const rect = new Rect({
     x: 30,
     y: 30,
@@ -86,10 +88,13 @@ async function main() {
   text.on('click', e => {
     console.log(e)
   })
-  polygon.on('click', e => {
+  polygon.on(mouse.enter, e => {
     console.log(e)
   })
-  
+  polygon.on(mouse.leave, e => {
+    console.log(e)
+  })
+
   rect.on('click', e => {
     console.log(e)
   })

@@ -1,14 +1,9 @@
-import { CANVAS_RERENDER_EVENT_TYPE } from './constant';
-import { CanvasTransformMatrix } from './types';
+import { CANVAS_RERENDER_EVENT_TYPE, mouse } from './constant'
+import { CanvasTransformMatrix } from './types'
 import Shape from './Shape'
 import EventEmitter from './EventEmitter'
 import eachAfter from './eachAfter'
-import {
-  pxByPixelRatio,
-  pixelRatio,
-  raiseError,
-  SHAPE_TYPE,
-} from './utils'
+import { pxByPixelRatio, pixelRatio, raiseError, SHAPE_TYPE } from './utils'
 import HitCanvas from './HitCanvas'
 import Group from './Group'
 
@@ -45,6 +40,8 @@ export default class Canvas extends EventEmitter {
   root: Group = new Group({ x: 0, y: 0 })
   hitCanvas: HitCanvas
   hitContext: OffscreenCanvasRenderingContext2D
+  debug: boolean = false
+  preShape: Shape | null = null
   constructor(
     canvas: HTMLCanvasElement,
     options: {
@@ -144,6 +141,10 @@ export default class Canvas extends EventEmitter {
     this.hitCanvas.add(this.root)
     this.root.render(this.ctx)
     this.root.renderHit(this.hitContext)
+    this.debugRender()
+  }
+  debugRender = () => {
+    if (this.debug) this.ctx.drawImage(this.hitCanvas.offscreenCanvas, 0, 0)
   }
   private _setCanvasPixelRatio = () => {
     this.canvasElement.style.width = `${this.width}px`
@@ -185,11 +186,37 @@ export default class Canvas extends EventEmitter {
    * @param {MouseEvent} e
    */
   private _emitShapeEvents = (e: MouseEvent) => {
-    const { offsetX, offsetY } = e
+    const { offsetX, offsetY, type } = e
     const p = this.hitCanvas.getImageData(offsetX, offsetY)
     const color = `rgb(${p[0]},${p[1]},${p[2]})`
     eachAfter(this.root, node => {
-      if (node.color === color) node._emitMouseEvent(e)
+      if (node.color === color) {
+        node.emitMouseEvent(e)
+        switch (type) {
+          case mouse.move:
+            this.handleMouseMove(node, e)
+            break
+        }
+      }
     })
+  }
+  // TODO 
+  private handleMouseMove(shape: Shape | Group, e: MouseEvent) {
+    // if preShape != shape，then mouse is move enter shape
+    if (this.preShape !== shape) {
+      shape.emitMouseEvent({
+        type: mouse.enter,
+        ...e,
+      })
+    }
+    // if shape && preShape != shape，then mouse is move out preShape
+    if (this.preShape && this.preShape !== shape) {
+      this.preShape.emitMouseEvent({
+        type: mouse.leave,
+        ...e,
+      })
+    }
+    
+    this.preShape = shape
   }
 }

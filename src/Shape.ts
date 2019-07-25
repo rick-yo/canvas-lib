@@ -1,5 +1,5 @@
 import { CanvasStyles } from './types'
-import { CANVAS_RERENDER_EVENT_TYPE } from './constant'
+import { CANVAS_RERENDER_EVENT_TYPE, mouse } from './constant'
 import {
   CanvasTransformMatrix,
   MousePosition,
@@ -63,12 +63,9 @@ export default class Shape<
   constructor(attrs: P) {
     super();
     this._attrs = attrs;
-    const { draggable } = this._attrs;
-    if(draggable) {
-      this._unHandleDrag()
-      this.on('mousedown', this.handleDragStart)
-      this.on('mouseup', this.handleDragEnd)
-    }
+    this._unHandleDrag()
+    this.on(mouse.down, this.handleDragStart)
+    this.on(mouse.up, this.handleDragEnd)
   }
   attr<K extends keyof P>(key: K): P[K]
   attr<K extends keyof P>(key: K, value: P[K]): void
@@ -147,7 +144,7 @@ export default class Shape<
     }
     return groups
   }
-  public _emitMouseEvent(e: MouseEvent) {
+  public emitMouseEvent(e: MouseEvent) {
     const position = this._getMousePosition(e)
     this.emit(position.type, position)
     const parents = this._getShapeParents()
@@ -170,25 +167,27 @@ export default class Shape<
   protected _emitCanvasRerender() {
     this.canvas && this.canvas.emit(CANVAS_RERENDER_EVENT_TYPE, this);
   }
-  private _unHandleDrag = () => {
-    this.off('mousedown', this.handleDragStart)
-    this.off('mousemove', this.handleDrag)
-    this.off('mouseup', this.handleDragEnd)
+  protected _unHandleDrag = () => {
+    this.off(mouse.down, this.handleDragStart)
+    this.off(mouse.move, this.handleDrag)
+    this.off(mouse.up, this.handleDragEnd)
   }
-  private handleDragStart = (e: MousePosition) => {
-    this.on('mousemove', this.handleDrag)
+  public handleDragStart = (e: MouseEvent) => {
+    window.addEventListener(mouse.move, this.handleDrag)
     this.emit('dragstart', e)
   }
-  private handleDrag = (e: MousePosition) => {
-    const { movementX, movementY } = e;
-    this._setAttr('x', this._attrs.x + movementX)
-    this._setAttr('y', this._attrs.y + movementY)
-    this._emitCanvasRerender()
+  // should not bubble up to parent group, so use `emit()` instead of `_emitMouseEvent`
+  public handleDrag = (e: MouseEvent) => {
+    const { draggable, x, y } = this._attrs;
     this.emit('drag', e)
+    if (!draggable) return
+    const { movementX, movementY } = e;
+    this._setAttr('x', x + movementX)
+    this._setAttr('y', y + movementY)
+    this._emitCanvasRerender()
   }
-  private handleDragEnd = (e: MousePosition) => {
-    this.off('mousemove', this.handleDrag)
+  public handleDragEnd = (e: MouseEvent) => {
+    window.removeEventListener(mouse.move, this.handleDrag)
     this.emit('dragend', e)
   }
 }
-
