@@ -55,6 +55,7 @@ export default class Shape<
   data: any
   color = ''
   protected path: Path2D | null = null
+  isDraging = false
   /**
    * Creates an instance of Shape with attrs.
    * @param {P} attrs
@@ -144,16 +145,17 @@ export default class Shape<
     }
     return groups
   }
-  public emitMouseEvent(e: MouseEvent) {
-    const position = this._getMousePosition(e)
-    this.emit(position.type, position)
+  public emitMouseEvent(type: string, e: MouseEvent) {
+    const position = this._getMousePosition(type, e)
+    this.emit(type, position)
+    console.log('position :', position);
     const parents = this._getShapeParents()
     parents.forEach(parent => {
-      parent.emit(position.type, position)
+      parent.emit(type, position)
     })
   }
-  protected _getMousePosition(e: MouseEvent): MousePosition {
-    const { offsetX, offsetY, type, movementX, movementY } = e;
+  protected _getMousePosition(type: string,e: MouseEvent): MousePosition {
+    const { offsetX, offsetY, movementX, movementY } = e;
     const position: MousePosition = {
       offsetX,
       offsetY,
@@ -178,15 +180,18 @@ export default class Shape<
   }
   // should not bubble up to parent group, so use `emit()` instead of `_emitMouseEvent`
   public handleDrag = (e: MouseEvent) => {
+    this.isDraging = true
     const { draggable, x, y } = this._attrs;
     this.emit('drag', e)
     if (!draggable) return
-    const { movementX, movementY } = e;
+    const { movementX, movementY, clientX, clientY } = e;
+    if (clientX <= 0 || clientY <= 0) return
     this._setAttr('x', x + movementX)
     this._setAttr('y', y + movementY)
     this._emitCanvasRerender()
   }
   public handleDragEnd = (e: MouseEvent) => {
+    this.isDraging = false
     window.removeEventListener(mouse.move, this.handleDrag)
     this.emit('dragend', e)
   }

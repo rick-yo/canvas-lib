@@ -7,5 +7,12 @@ export enum mouse {
   enter = 'mouseenter',
   leave = 'mouseleave',
   down = 'mousedown',
-  up = 'mouseup'
+  up = 'mouseup',
+  click = 'click',
+  out = 'mouseout',
+  over = 'mouseover',
+  drag = 'drag',
+  dragStart = 'dragStart',
+  dragEnd = 'dragEnd',
+  drop = 'drop',
 }

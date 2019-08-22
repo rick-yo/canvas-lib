@@ -6,23 +6,22 @@ import eachAfter from './eachAfter'
 import { pxByPixelRatio, pixelRatio, raiseError, SHAPE_TYPE } from './utils'
 import HitCanvas from './HitCanvas'
 import Group from './Group'
+import eachBefore from './eachBefore'
 
 type MouseEventType =
-  | 'click'
-  | 'contextmenu'
-  | 'dblclick'
-  | 'mousedown'
-  | 'mouseup'
-  | 'mousemove'
+  // | 'click'
+  'contextmenu' | 'dblclick' | 'mousedown' | 'mouseup' | 'mousemove'
 
 const MOUSE_EVENTS: MouseEventType[] = [
-  'click',
+  // 'click',
   'contextmenu',
   'dblclick',
   'mousedown',
   'mouseup',
   'mousemove',
 ]
+const LEFT_BTN_CODE = 0
+const CLICK_OFFSET = 40
 
 /**
  * Canvas is shape's container, it can `add` or `remove` shape,
@@ -42,6 +41,9 @@ export default class Canvas extends EventEmitter {
   hitContext: OffscreenCanvasRenderingContext2D
   debug: boolean = false
   preShape: Shape | null = null
+  dragging: Shape | null = null
+  mousedownShape: Shape | null = null
+  mousedownOffset: { x: number, y: number} = { x: 0, y: 0 }
   constructor(
     canvas: HTMLCanvasElement,
     options: {
@@ -186,37 +188,70 @@ export default class Canvas extends EventEmitter {
    * @param {MouseEvent} e
    */
   private _emitShapeEvents = (e: MouseEvent) => {
+    const shape = this.getHitShape(e)
+    const { offsetX, offsetY, type } = e
+    if (type === 'mousemove') {
+      if (this.preShape && this.preShape !== shape) {
+        this.preShape.emitMouseEvent(mouse.out, e)
+        this.preShape.emitMouseEvent(mouse.leave, e)
+        if (this.dragging) {
+          this.dragging.emitMouseEvent('drag', e)
+          // self._emitEvent('mousemove', e, point, shape);
+        }
+        if (shape) {
+          if (!this.dragging) {
+            if (this.mousedownShape === shape) {
+              this.dragging = shape
+              this.mousedownShape = null
+              shape.emitMouseEvent('dragstart', e)
+            } else {
+              shape.emitMouseEvent('mousemove', e)
+            }
+          }
+          if (this.preShape !== shape) {
+            shape.emitMouseEvent(mouse.enter, e)
+            shape.emitMouseEvent(mouse.over, e)
+          }
+        }
+        this.preShape = shape
+      }
+    } else {
+      shape && shape.emitMouseEvent(type, e)
+      // e.button === 0 保证按下左键，防止点击右键触发click
+      if (
+        !this.dragging &&
+        type === 'mousedown' &&
+        e.button === LEFT_BTN_CODE
+      ) {
+        this.mousedownShape = shape
+        this.mousedownOffset = { x: e.clientX, y: e.clientY }
+      }
+      if (type === 'mouseup' && e.button === LEFT_BTN_CODE) {
+        const dx = this.mousedownOffset.x - e.clientX
+        const dy = this.mousedownOffset.y - e.clientY
+        const dist = dx * dx + dy * dy
+        if (dist < CLICK_OFFSET) {
+          this.mousedownShape && this.mousedownShape.emitMouseEvent('click', e)
+        }
+        if (this.dragging) {
+          this.dragging.emitMouseEvent('dragend', e)
+          this.dragging.emitMouseEvent('drop', e)
+          this.dragging = null
+        }
+        this.mousedownShape = null
+      }
+    }
+  }
+  private getHitShape(e: MouseEvent): Group | null {
     const { offsetX, offsetY, type } = e
     const p = this.hitCanvas.getImageData(offsetX, offsetY)
     const color = `rgb(${p[0]},${p[1]},${p[2]})`
-    eachAfter(this.root, node => {
+    let shape: Group | null = null
+    eachBefore(this.root, node => {
       if (node.color === color) {
-        node.emitMouseEvent(e)
-        switch (type) {
-          case mouse.move:
-            this.handleMouseMove(node, e)
-            break
-        }
+        shape = node
       }
     })
-  }
-  // TODO 
-  private handleMouseMove(shape: Shape | Group, e: MouseEvent) {
-    // if preShape != shape，then mouse is move enter shape
-    if (this.preShape !== shape) {
-      shape.emitMouseEvent({
-        type: mouse.enter,
-        ...e,
-      })
-    }
-    // if shape && preShape != shape，then mouse is move out preShape
-    if (this.preShape && this.preShape !== shape) {
-      this.preShape.emitMouseEvent({
-        type: mouse.leave,
-        ...e,
-      })
-    }
-    
-    this.preShape = shape
+    return shape
   }
 }

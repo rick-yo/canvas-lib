@@ -105,6 +105,7 @@ async function main() {
   arc.on('click', e => {
     console.log(e)
   })
+  group.on('click', e => console.log('e :', e))
   group.add(text)
   group.add(rect1)
   group.add(rect)
